@@ -32,7 +32,6 @@ module.exports = {
         type: Sequelize.STRING(256),
         allowNull: false,
         unique: true,
-
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,
@@ -52,6 +51,6 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Users';
-    await queryInterface.dropTable(options, options);
+    await queryInterface.dropTable(options);
   }
 };
