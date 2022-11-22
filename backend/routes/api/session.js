@@ -69,17 +69,17 @@ router.get(
 
 
 // Get the Current User
-router.get('/current', async (req, res) => {
-  const user = await User.scope('currentUser');
+// router.get('/current', async (req, res) => {
+//   const user = await User.scope('currentUser');
 
-  if (!user) {
-    return res.json(
-      {
-        user: null
-      }
-    );
-  }
+//   if (!user) {
+//     return res.json(
+//       {
+//         user: null
+//       }
+//     );
+//   }
 
-  return res.json({user});
-})
+//   return res.json({user});
+// })
 module.exports = router;
