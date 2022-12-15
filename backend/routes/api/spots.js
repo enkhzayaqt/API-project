@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Get all Spots
 router.get('/', async (req, res) => {
+    console.log('AAAA', req.user)
     const spots = await Spot.findAll();
 
     return res.json(spots);
