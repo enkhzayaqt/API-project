@@ -25,4 +25,39 @@ router.get('/:spotId', async (req, res, next) => {
     }
 );
 
+router.post('/', async (req, res, err) => {
+    try {
+        const { address, city, state, country, lat, lng, name, description, price } = req.body;
+        const spot = await Spot.create({
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        })
+        res.status(201);
+        res.json(spot)
+    } catch (err) {
+        res.status(400);
+        res.json({
+            message: 'Validation Error',
+            details: {
+                "address": "Street address is required",
+                "city": "City is required",
+                "state": "State is required",
+                "country": "Country is required",
+                "lat": "Latitude is not valid",
+                "lng": "Longitude is not valid",
+                "name": "Name must be less than 50 characters",
+                "description": "Description is required",
+                "price": "Price per day is required"
+              }
+        })
+    }
+})
+
 module.exports = router;
