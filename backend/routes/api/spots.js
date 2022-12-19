@@ -1,17 +1,28 @@
 const express = require('express');
 
-const { Spot } = require('../../db/models');
+const { Spot, User } = require('../../db/models');
+
+const { restoreUser } = require('../../utils/auth');
+const { validateNewSpot} = require('../../utils/validation')
 
 const router = express.Router();
 
 // Get all Spots
 router.get('/', async (req, res) => {
-    console.log('AAAA', req.user)
     const spots = await Spot.findAll();
-
     return res.json(spots);
-    }
+}
 );
+
+// Get all Spots owned by the Current User
+router.get('/current', restoreUser, async (req, res) => {
+    const spot = await Spot.findAll({
+        where: {
+            ownerId: req.user.id
+        }
+    })
+    return res.json(spot);
+})
 
 // Get details of a Spot from an id
 router.get('/:spotId', async (req, res, next) => {
@@ -22,42 +33,45 @@ router.get('/:spotId', async (req, res, next) => {
         return next(err);
     }
     return res.json(spots);
-    }
+}
 );
 
-router.post('/', async (req, res, err) => {
-    try {
-        const { address, city, state, country, lat, lng, name, description, price } = req.body;
-        const spot = await Spot.create({
-            address,
-            city,
-            state,
-            country,
-            lat,
-            lng,
-            name,
-            description,
-            price
-        })
-        res.status(201);
-        res.json(spot)
-    } catch (err) {
-        res.status(400);
-        res.json({
-            message: 'Validation Error',
-            details: {
-                "address": "Street address is required",
-                "city": "City is required",
-                "state": "State is required",
-                "country": "Country is required",
-                "lat": "Latitude is not valid",
-                "lng": "Longitude is not valid",
-                "name": "Name must be less than 50 characters",
-                "description": "Description is required",
-                "price": "Price per day is required"
-              }
-        })
-    }
+
+
+router.post('/', restoreUser, async (req, res, err) => {
+
+        const errors = validateNewSpot(req.body);
+        if (errors.length === 0) {
+            const { address, city, state, country, lat, lng, name, description, price } = req.body;
+            const spot = await Spot.create({
+                ownerId: req.user.id,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price
+            })
+            res.status(201);
+            res.json(spot)
+        } else {
+            res.status(400);
+            const errResponse = {};
+            errors.forEach(er => {
+                errResponse[er[0]] = er[1];
+            });
+
+            res.json({
+                message: 'Validation Error',
+                errors: errResponse
+            })
+        }
+
 })
+
+
 
 module.exports = router;
