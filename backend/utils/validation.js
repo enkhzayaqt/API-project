@@ -19,6 +19,20 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+
+function validateNewSpot(data) {
+  const errors = [];
+  if (!data.address) errors.push(["address", "Street address is required"]);
+  if (!data.city) errors.push(["city", "City is required"]);
+  if (!data.state) errors.push(["state", "State is required"]);
+  if (!data.country) errors.push(["country", "Country is required"]);
+  if (!data.lat) errors.push(["lat", "Latitude is not valid"]);
+  if (!data.lng) errors.push(["lng", "Longitude is not valid"]);
+  if (!data.name) errors.push(["name", "Name must be less than 50 characters"]);
+  if (!data.description) errors.push(["description", "Description is required"]);
+  if (!data.price) errors.push(["price", "Price per day is required"]);
+  return errors;
+}
 module.exports = {
-  handleValidationErrors
+  handleValidationErrors, validateNewSpot
 };
