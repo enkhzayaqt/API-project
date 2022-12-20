@@ -2,7 +2,8 @@ const { urlencoded } = require('express');
 const express = require('express');
 
 const { Spot, User, SpotImage, Review, ReviewImage } = require('../../db/models');
-const { restoreUser , requireAuth} = require('../../utils/auth');
+const { restoreUser, requireAuth } = require('../../utils/auth');
+const { validateNewReview } = require('../../utils/validation');
 
 const router = express.Router();
 
@@ -21,8 +22,8 @@ router.get('/current', requireAuth, async (req, res) => {
                 model: Spot,
                 attributes: {
                     exclude: [
-                      'createdAt',
-                      'updatedAt'
+                        'createdAt',
+                        'updatedAt'
                     ]
                 }
             },
@@ -37,6 +38,41 @@ router.get('/current', requireAuth, async (req, res) => {
         Reviews: reviews
     })
 })
+
+// Edit a Review
+router.put('/:reviewId', requireAuth, async (req, res, next) => {
+    const editReview = await Review.findOne({
+        where: {
+            id: req.params.reviewId,
+            userId: req.user.id
+        }
+    });
+    if (!editReview) {
+        res.json({
+            message: "Review couldn't be found",
+            statusCode: 404
+        })
+    }
+    const errors = validateNewReview(req.body);
+    if (errors.length === 0) {
+        const { review, stars } = req.body;
+        editReview.review = review;
+        editReview.stars = stars;
+
+        res.status(201);
+        res.json(editReview)
+    } else {
+        res.status(400);
+        const errResponse = {};
+        errors.forEach(er => {
+            errResponse[er[0]] = er[1];
+        });
+        res.json({
+            message: 'Validation Error',
+            errors: errResponse
+        })
+    }
+});
 
 // Delete a Review
 router.delete('/:reviewId', requireAuth, async (req, res) => {

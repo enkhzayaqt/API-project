@@ -1,7 +1,7 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, User, SpotImage, Review } = require('../../db/models');
+const { Spot, User, SpotImage, Review, Booking } = require('../../db/models');
 
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { validateNewSpot, validateNewReview } = require('../../utils/validation')
@@ -35,6 +35,33 @@ router.get('/:spotId', async (req, res, next) => {
     }
     return res.json(spots);
 });
+
+// Get all Bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+
+    const spot = await Spot.findByPk(req.params.spotId);
+    let attributes = [], include = [];
+    if (spot.ownerId === req.user.id) {
+        attributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt','updatedAt' ],
+            include = [{
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            }]
+    }
+    else attributes = ['spotId', 'startDate', 'endDate']
+
+    const bookings = await Booking.findAll({
+        where: {
+            spotId: req.params.spotId
+        },
+        attributes,
+        include
+    });
+
+    return res.json({
+        Bookings: bookings
+    })
+})
 
 // Get all Reviews by a Spot's id
 router.get('/:spotId/reviews', requireAuth, async (req, res) => {
