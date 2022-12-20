@@ -33,6 +33,14 @@ function validateNewSpot(data) {
   if (!data.price) errors.push(["price", "Price per day is required"]);
   return errors;
 }
+
+function validateNewReview(data) {
+  const errors = [];
+  if (!data.review) errors.push(["review", "Review text is required"]);
+  if (!data.stars) errors.push(["stars", "Stars must be an integer from 1 to 5"]);
+  return errors;
+}
+
 module.exports = {
-  handleValidationErrors, validateNewSpot
+  handleValidationErrors, validateNewSpot, validateNewReview
 };
