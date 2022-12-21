@@ -41,6 +41,23 @@ function validateNewReview(data) {
   return errors;
 }
 
+
+function validateQueryParams(data) {
+  const errors = [];
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = data;
+
+  if (parseInt(page) < 1 || parseInt(page) > 10 ) errors.push(["page", "Page must be greater than or equal to 1"]);
+  if (parseInt(size) < 1 || parseInt(size) > 20) errors.push(["size", "Size must be greater than or equal to 1"]);
+  if (minPrice && parseFloat(minPrice) < 0) errors.push(["minPrice", "Minimum price must be greater than or equal to 0"]);
+  if (maxPrice && parseFloat(maxPrice) < 0) errors.push(["maxPrice", "Maximum price must be greater than or equal to 0"]);
+
+  if (maxLat || parseFloat(maxLat) < -90 || parseFloat(maxLat) > 90) errors.push(["maxLat", "Maximum latitude is invalid"]);
+  if (minLat || parseFloat(minLat) < -90 || parseFloat(minLat) > 90) errors.push(["minLat", "Minimum latitude is invalid"]);
+  if (maxLng || parseFloat(maxLng) < -180 || parseFloat(maxLng) > 180) errors.push(["maxLng", "Maximum longitude is invalid"]);
+  if (minLng || parseFloat(minLng) < -180 || parseFloat(minLng) > 180) errors.push(["minLng", "Minimum longitude is invalid"]);
+  return errors;
+}
+
 module.exports = {
-  handleValidationErrors, validateNewSpot, validateNewReview
+  handleValidationErrors, validateNewSpot, validateNewReview, validateQueryParams
 };
