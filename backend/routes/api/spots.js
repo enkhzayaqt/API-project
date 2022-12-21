@@ -159,13 +159,13 @@ router.get('/:spotId/reviews', requireAuth, async (req, res) => {
 
 // Edit a Spot
 router.put('/:spotId', requireAuth, async (req, res, next) => {
-    const spot = await Spot.findAll({
+    const spot = await Spot.findOne({
         where: {
             id: req.params.spotId,
             ownerId: req.user.id
         }
     });
-
+console.log(spot)
     const errors = validateNewSpot(req.body);
     if (errors.length === 0) {
         const { address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -192,9 +192,6 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         })
     }
 });
-
-
-
 
 // Create a Booking from a Spot based on the Spot's id
 router.post('/:spotId/bookings', requireAuth, async (req, res) => {
@@ -269,10 +266,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
     }
 })
 
-
-
-
-
 // Create a Review for a Spot based on the Spot's id
 router.post('/:spotId/reviews', requireAuth, async (req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
@@ -325,8 +318,11 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
 
 // Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async (req, res) => {
-    const spot = await Spot.findByPk(req.params.spotId);
-    if (spot.ownerId === req.user.id) {
+    const spot = await Spot.findOne({
+        id: req.params.spotId,
+        ownerId: req.user.id
+    })
+    if (spot) {
         const { url, preview } = req.body;
         const spotImage = await SpotImage.create({
             spotId: spot.id,
