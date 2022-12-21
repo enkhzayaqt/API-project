@@ -1,7 +1,7 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, User, SpotImage, Review, Booking } = require('../../db/models');
+const { Spot, User, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 
 const { requireAuth } = require('../../utils/auth');
 const { validateNewSpot, validateNewReview, validateQueryParams } = require('../../utils/validation')
@@ -77,10 +77,47 @@ router.get('/', async (req, res) => {
 
         const spots = await Spot.findAll({
             where,
+            include: [
+                {
+                    model: Review
+                },
+                {
+                    model: SpotImage
+                },
+            ],
             ...pagination
         });
+        let spotList = []
+        spots.forEach(spot => {
+            spotList.push(spot.toJSON())
+        })
+        spotList.forEach(spot => {
+            let totalSpotStars = 0;
+            spot.Reviews.forEach(review => {
+                totalSpotStars += review.stars;
+            });
+            spot.avgRating = totalSpotStars / spot.Reviews.length;
+
+            if (!spot.avgRating) {
+                spot.avgRating = 'no reviews yet'
+            }
+            delete spot.Reviews
+        })
+
+        spotList.forEach(spot => {
+            spot.SpotImages.forEach(image => {
+                if (image.preview === true) {
+                    spot.previewImage = image.url
+                }
+            })
+            if (!spot.previewImage) {
+                spot.previewImage = 'no image'
+            }
+            delete spot.SpotImages
+        })
+
         return res.json({
-            spots,
+            Spots: spotList,
             page,
             size
         });
@@ -109,13 +146,37 @@ router.get('/current', requireAuth, async (req, res) => {
 
 // Get details of a Spot from an id
 router.get('/:spotId', async (req, res, next) => {
-    const spots = await Spot.findByPk(req.params.spotId);
-    if (!spots) {
+    const spot = await Spot.findOne({
+        where: {
+            id: req.params.spotId
+        },
+        include: [
+            {
+                model: SpotImage,
+                attributes: ['id', 'url', 'preview']
+            },
+            {
+                model: User
+            }
+        ]
+
+    });
+
+    if (!spot) {
         const err = new Error("Spot couldn't be found");
         err.status = 404;
         return next(err);
     }
-    return res.json(spots);
+
+    const editSpot = spot.toJSON();
+    editSpot.Owner = {
+        id: spot.User.id,
+        firstName: spot.User.firstName,
+        lastName: spot.User.lastName
+    }
+
+    delete editSpot.User
+    return res.json(editSpot);
 });
 
 // Get all Bookings for a Spot based on the Spot's id
@@ -128,7 +189,8 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
                 message: "Spot couldn't be found",
                 statusCode: 404
             }
-        )}
+        )
+    }
     let attributes = [], include = [];
     if (spot.ownerId === req.user.id) {
         attributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
@@ -157,7 +219,17 @@ router.get('/:spotId/reviews', requireAuth, async (req, res) => {
     const review = await Review.findAll({
         where: {
             spotId: req.params.spotId
-        }
+        },
+        include: [
+            {
+                model: User,
+                attributes: ['id','firstName','lastName']
+            },
+            {
+                model: ReviewImage,
+                attributes: ['id','url']
+            }
+        ]
     });
     return res.json({
         Reviews: review
@@ -190,6 +262,7 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         spot.name = name;
         spot.description = description;
         spot.price = price;
+        spot.save();
         res.status(201);
         res.json(spot)
     } else {
@@ -276,6 +349,10 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
         });
         return res.json(newBooking)
     }
+    return res.json({
+        message: "Owner cannot book!",
+        statusCode: 400
+    })
 })
 
 // Create a Review for a Spot based on the Spot's id
