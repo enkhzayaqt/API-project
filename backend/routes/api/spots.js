@@ -165,7 +165,12 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
             ownerId: req.user.id
         }
     });
-console.log(spot)
+    if (!spot) {
+        res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+          })
+    }
     const errors = validateNewSpot(req.body);
     if (errors.length === 0) {
         const { address, city, state, country, lat, lng, name, description, price } = req.body;
