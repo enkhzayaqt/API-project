@@ -284,7 +284,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
     }
     const review = await Review.findOne({
         where: {
-            spotid: req.params.spotId,
+            spotId: req.params.spotId,
             userId: req.user.id
         }
     })
