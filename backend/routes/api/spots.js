@@ -3,7 +3,7 @@ const express = require('express');
 
 const { Spot, User, SpotImage, Review, Booking } = require('../../db/models');
 
-const { restoreUser, requireAuth } = require('../../utils/auth');
+const { requireAuth } = require('../../utils/auth');
 const { validateNewSpot, validateNewReview, validateQueryParams } = require('../../utils/validation')
 const { Op } = require("sequelize");
 

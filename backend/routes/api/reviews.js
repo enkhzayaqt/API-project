@@ -1,8 +1,8 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, User, SpotImage, Review, ReviewImage } = require('../../db/models');
-const { restoreUser, requireAuth } = require('../../utils/auth');
+const { Spot, User, Review, ReviewImage } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 const { validateNewReview } = require('../../utils/validation');
 
 const router = express.Router();
@@ -64,16 +64,16 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
             })
             return res.json(reviewImage)
         } else {
-            res.json( {
+            res.json({
                 message: "Maximum number of images for this resource was reached",
                 statusCode: 403
-              })
+            })
         }
 
     }
     return res.json({
         message: "Review couldn't be found",
-      statusCode: 404
+        statusCode: 404
     })
 })
 
