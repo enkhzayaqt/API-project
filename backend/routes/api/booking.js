@@ -1,9 +1,8 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, User, SpotImage, Review, ReviewImage, Booking, sequelize } = require('../../db/models');
-const { restoreUser, requireAuth } = require('../../utils/auth');
-const { validateNewReview } = require('../../utils/validation');
+const { Spot, Booking } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -34,7 +33,6 @@ router.get('/current', requireAuth, async (req, res) => {
 // Edit a Booking
 router.put('/:bookingId', requireAuth, async (req, res, next) => {
     const { startDate, endDate } = req.body;
-    console.log('::::::::::::::::', Date())
     const editBooking = await Booking.findOne({
         where: {
             id: req.params.bookingId,

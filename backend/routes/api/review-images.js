@@ -1,12 +1,10 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, User, SpotImage, Review, ReviewImage } = require('../../db/models');
-const { restoreUser, requireAuth } = require('../../utils/auth');
-const { validateNewReview } = require('../../utils/validation');
+const { Review, ReviewImage } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
-
 
 
 // Delete a Review Image
