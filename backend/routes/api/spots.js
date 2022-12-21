@@ -122,6 +122,13 @@ router.get('/:spotId', async (req, res, next) => {
 router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
     const spot = await Spot.findByPk(req.params.spotId);
+    if (!spot) {
+        res.json(
+            {
+                message: "Spot couldn't be found",
+                statusCode: 404
+            }
+        )}
     let attributes = [], include = [];
     if (spot.ownerId === req.user.id) {
         attributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
@@ -169,7 +176,7 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         res.json({
             message: "Spot couldn't be found",
             statusCode: 404
-          })
+        })
     }
     const errors = validateNewSpot(req.body);
     if (errors.length === 0) {
