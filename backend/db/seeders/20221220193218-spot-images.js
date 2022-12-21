@@ -8,31 +8,28 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    options.tableName = 'Reviews';
+    options.tableName = 'SpotImages';
     return queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        userId: 1,
-        review: 'good',
-        stars: 4,
+        url: 'spot image url',
+        preview: true,
       },
       {
         spotId: 2,
-        userId: 2,
-        review: 'bad',
-        stars: 2,
+        url: 'spot image url',
+        preview: false,
       },
       {
         spotId: 3,
-        userId: 3,
-        review: 'very good',
-        stars: 5,
-      }
+        url: 'spot image url',
+        preview: true,
+      },
     ], {})
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Reviews';
+    options.tableName = 'SpotImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       spotId: {
