@@ -136,12 +136,50 @@ router.get('/', async (req, res) => {
 
 // Get all Spots owned by the Current User
 router.get('/current', requireAuth, async (req, res) => {
-    const spot = await Spot.findAll({
+    const spots = await Spot.findAll({
         where: {
             ownerId: req.user.id
-        }
+        },
+        include: [
+            {
+                model: Review
+            },
+            {
+                model: SpotImage
+            },
+        ],
     })
-    return res.json(spot);
+
+    let spotList = []
+        spots.forEach(spot => {
+            spotList.push(spot.toJSON())
+        })
+        spotList.forEach(spot => {
+            let totalSpotStars = 0;
+            spot.Reviews.forEach(review => {
+                totalSpotStars += review.stars;
+            });
+            spot.avgRating = totalSpotStars / spot.Reviews.length;
+
+            if (!spot.avgRating) {
+                spot.avgRating = 'no reviews yet'
+            }
+            delete spot.Reviews
+        })
+
+        spotList.forEach(spot => {
+            spot.SpotImages.forEach(image => {
+                if (image.preview === true) {
+                    spot.previewImage = image.url
+                }
+            })
+            if (!spot.previewImage) {
+                spot.previewImage = 'no image'
+            }
+            delete spot.SpotImages
+        })
+
+    return res.json(spotList);
 })
 
 // Get details of a Spot from an id
@@ -167,6 +205,10 @@ router.get('/:spotId', async (req, res, next) => {
         err.status = 404;
         return next(err);
     }
+
+
+
+
 
     const editSpot = spot.toJSON();
     editSpot.Owner = {
