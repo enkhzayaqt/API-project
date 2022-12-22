@@ -25,6 +25,9 @@ router.get('/current', requireAuth, async (req, res) => {
                         'createdAt',
                         'updatedAt'
                     ]
+                },
+                include: {
+                    model: SpotImage
                 }
             },
             {
@@ -33,8 +36,26 @@ router.get('/current', requireAuth, async (req, res) => {
             },
         ]
     })
+
+    let reviewList = []
+    reviews.forEach(review => {
+        reviewList.push(review.toJSON());
+    })
+
+    reviewList.forEach(review => {
+        review.Spot.SpotImages.forEach(image => {
+            if (image.preview === true) {
+                review.Spot.previewImage = image.url
+            }
+        })
+        if (!review.Spot.previewImage) {
+            review.Spot.previewImage = 'no image'
+        }
+        delete review.Spot.SpotImages
+    })
+
     res.json({
-        Reviews: reviews
+        Reviews: reviewList
     })
 })
 

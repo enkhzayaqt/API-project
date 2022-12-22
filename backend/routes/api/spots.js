@@ -110,7 +110,7 @@ router.get('/', async (req, res) => {
                 }
             })
             if (!spot.previewImage) {
-                spot.previewImage = 'no image'
+                spot.previewImage = 'no image yet'
             }
             delete spot.SpotImages
         })
@@ -173,7 +173,7 @@ router.get('/current', requireAuth, async (req, res) => {
             }
         })
         if (!spot.previewImage) {
-            spot.previewImage = 'no image'
+            spot.previewImage = 'no image yet'
         }
         delete spot.SpotImages
     })
