@@ -1,7 +1,7 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, Booking } = require('../../db/models');
+const { Spot, Booking, SpotImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
@@ -20,12 +20,33 @@ router.get('/current', requireAuth, async (req, res) => {
                         'createdAt',
                         'updatedAt'
                     ]
+                },
+                include: {
+                    model: SpotImage
                 }
             },
         ]
     })
+
+    let bookingList = []
+    bookings.forEach(booking => {
+        bookingList.push(booking.toJSON());
+    })
+
+    bookingList.forEach(booking => {
+        booking.Spot.SpotImages.forEach(image => {
+            if (image.preview === true) {
+                booking.Spot.previewImage = image.url
+            }
+        })
+        if (!booking.Spot.previewImage) {
+            booking.Spot.previewImage = 'no image'
+        }
+        delete booking.Spot.SpotImages
+    })
+
     res.json({
-        Bookings: bookings
+        Reviews: bookingList
     })
 })
 
