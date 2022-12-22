@@ -39,21 +39,23 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
             userId: req.user.id
         }
     });
-
     if (!editBooking) {
+        res.status(404)
         res.json({
             message: "Booking couldn't be found",
             statusCode: 404
         })
     } else if (startDate > endDate) {
-        return res.json({
+        res.status(400)
+        res.json({
             message: "Validation error",
             statusCode: 400,
             errors: {
                 endDate: "endDate cannot come before startDate"
             }
         })
-    } else if (Date() > endDate) {
+    } else if (new Date(editBooking.endDate) < new Date()) {
+        res.status(403)
         res.json({
             message: "Past bookings can't be modified",
             statusCode: 403
@@ -62,6 +64,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
     } else {
         if (startDate) editBooking.startDate = startDate;
         if (endDate) editBooking.endDate = endDate;
+        editBooking.save();
         return res.json(editBooking)
     }
 
@@ -78,6 +81,7 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
 
     if (booking) {
         if (new Date() > new Date(booking.startDate)) {
+            res.status(403)
             res.json({
                 message: "Bookings that have been started can't be deleted",
                 statusCode: 403
@@ -87,12 +91,14 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
             res.status(200)
             res.json({
                 message: `Successfully deleted`,
+                statusCode: 200
             });
         }
     } else {
         res.status(404);
         res.json({
             message: "Booking couldn't be found",
+            statusCode: 404
         })
     }
 })

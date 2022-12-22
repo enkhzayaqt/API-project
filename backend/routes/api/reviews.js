@@ -1,7 +1,7 @@
 const { urlencoded } = require('express');
 const express = require('express');
 
-const { Spot, User, Review, ReviewImage } = require('../../db/models');
+const { Spot, User, Review, ReviewImage, SpotImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { validateNewReview } = require('../../utils/validation');
 
@@ -31,7 +31,6 @@ router.get('/current', requireAuth, async (req, res) => {
                 model: ReviewImage,
                 attributes: ['id', 'url']
             },
-
         ]
     })
     res.json({
@@ -62,8 +61,13 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
                 reviewId: req.params.reviewId,
                 url,
             })
-            return res.json(reviewImage)
+            reviewImage.save()
+            return res.json({
+                'id': reviewImage.id,
+                'url': reviewImage.url
+            })
         } else {
+            res.status(403)
             res.json({
                 message: "Maximum number of images for this resource was reached",
                 statusCode: 403
@@ -71,7 +75,8 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
         }
 
     }
-    return res.json({
+    res.status(404)
+    res.json({
         message: "Review couldn't be found",
         statusCode: 404
     })
@@ -87,6 +92,7 @@ router.put('/:reviewId', requireAuth, async (req, res, next) => {
         }
     });
     if (!editReview) {
+        res.status(404)
         res.json({
             message: "Review couldn't be found",
             statusCode: 404
@@ -97,8 +103,8 @@ router.put('/:reviewId', requireAuth, async (req, res, next) => {
         const { review, stars } = req.body;
         editReview.review = review;
         editReview.stars = stars;
-
-        res.status(201);
+        editReview.save();
+        res.status(200);
         res.json(editReview)
     } else {
         res.status(400);
@@ -122,11 +128,13 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
         res.status(200)
         res.json({
             message: `Successfully deleted`,
+            statusCode: 200
         });
     } else {
         res.status(404);
         res.json({
             message: "Review couldn't be found",
+            statusCode: 404
         })
     }
 })

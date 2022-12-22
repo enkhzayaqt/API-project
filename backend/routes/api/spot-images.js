@@ -21,12 +21,14 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
             res.status(200)
             res.json({
                 message: `Successfully deleted`,
+                statusCode: 200
             });
         }
     }
     res.status(404);
     res.json({
         message: "Spot Image couldn't be found",
+        statusCode: 404
     })
 })
 module.exports = router;
