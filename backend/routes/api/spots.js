@@ -309,45 +309,51 @@ router.get('/:spotId/reviews', requireAuth, async (req, res) => {
 
 // Edit a Spot
 router.put('/:spotId', requireAuth, async (req, res, next) => {
-    const spot = await Spot.findOne({
-        where: {
-            id: req.params.spotId,
-            ownerId: req.user.id
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    if (spot) {
+        //Authorization
+        if (req.user.id !== spot.ownerId) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
         }
-    });
-    if (!spot) {
-        res.status(404)
-        res.json({
-            message: "Spot couldn't be found",
-            statusCode: 404
-        })
+
+        const errors = validateNewSpot(req.body);
+        if (errors.length === 0) {
+            const { address, city, state, country, lat, lng, name, description, price } = req.body;
+            spot.address = address;
+            spot.city = city;
+            spot.state = state;
+            spot.country = country;
+            spot.lat = lat;
+            spot.lng = lng;
+            spot.name = name;
+            spot.description = description;
+            spot.price = price;
+            spot.save();
+            res.status(201);
+            res.json(spot)
+        } else {
+            res.status(400);
+            const errResponse = {};
+            errors.forEach(er => {
+                errResponse[er[0]] = er[1];
+            });
+            res.json({
+                message: 'Validation Error',
+                errors: errResponse
+            })
+        }
     }
-    const errors = validateNewSpot(req.body);
-    if (errors.length === 0) {
-        const { address, city, state, country, lat, lng, name, description, price } = req.body;
-        spot.address = address;
-        spot.city = city;
-        spot.state = state;
-        spot.country = country;
-        spot.lat = lat;
-        spot.lng = lng;
-        spot.name = name;
-        spot.description = description;
-        spot.price = price;
-        spot.save();
-        res.status(201);
-        res.json(spot)
-    } else {
-        res.status(400);
-        const errResponse = {};
-        errors.forEach(er => {
-            errResponse[er[0]] = er[1];
-        });
-        res.json({
-            message: 'Validation Error',
-            errors: errResponse
-        })
-    }
+
+    res.status(404)
+    res.json({
+        message: "Spot couldn't be found",
+        statusCode: 404
+    })
 });
 
 // Create a Booking from a Spot based on the Spot's id
@@ -487,21 +493,17 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
 
 // Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async (req, res, next) => {
-    const spot = await Spot.findOne({
-        where: {
-            id: req.params.spotId,
-            ownerId: req.user.id
-        }
-    })
-    if (!spot) {
-        res.status(404)
-        res.json({
-            message: "Spot couldn't be found",
-            statusCode: 404
-        })
-    }
+    const spot = await Spot.findByPk(req.params.spotId);
 
     if (spot) {
+        //Authorization
+        if (req.user.id !== spot.ownerId) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
+        }
         const { url, preview } = req.body;
         const spotImage = await SpotImage.create({
             spotId: req.params.spotId,
@@ -515,6 +517,11 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
             "preview": spotImage.preview
         });
     }
+    res.status(404)
+    res.json({
+        message: "Spot couldn't be found",
+        statusCode: 404
+    })
 })
 
 // Create a Spot
@@ -556,7 +563,15 @@ router.post('/', requireAuth, async (req, res, err) => {
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async (req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
-    if (spot && (spot.ownerId === req.user.id)) {
+    if (spot) {
+         //Authorization
+         if (req.user.id !== spot.ownerId) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
+        }
         await spot.destroy();
         res.status(200)
         res.json({
