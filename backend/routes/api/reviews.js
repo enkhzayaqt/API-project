@@ -64,14 +64,17 @@ router.get('/current', requireAuth, async (req, res) => {
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
     const { url } = req.body;
 
-    const review = await Review.findOne({
-        where: {
-            id: req.params.reviewId,
-            userId: req.user.id
-        }
-    })
+    const review = await Review.findByPk(req.params.reviewId)
 
     if (review) {
+        //Authorization
+        if (req.user.id !== review.userId) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
+        }
         const images = await ReviewImage.findAll({
             where: {
                 reviewId: req.params.reviewId
@@ -106,45 +109,58 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
 // Edit a Review
 router.put('/:reviewId', requireAuth, async (req, res, next) => {
-    const editReview = await Review.findOne({
-        where: {
-            id: req.params.reviewId,
-            userId: req.user.id
+    const editReview = await Review.findByPk(req.params.reviewId)
+
+    if (editReview) {
+        //Authorization
+        if (req.user.id !== editReview.userId) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
         }
-    });
-    if (!editReview) {
-        res.status(404)
-        res.json({
-            message: "Review couldn't be found",
-            statusCode: 404
-        })
+        const errors = validateNewReview(req.body);
+        if (errors.length === 0) {
+            const { review, stars } = req.body;
+            editReview.review = review;
+            editReview.stars = stars;
+            editReview.save();
+            res.status(200);
+            res.json(editReview)
+        } else {
+            res.status(400);
+            const errResponse = {};
+            errors.forEach(er => {
+                errResponse[er[0]] = er[1];
+            });
+            res.json({
+                message: 'Validation Error',
+                errors: errResponse
+            })
+        }
     }
-    const errors = validateNewReview(req.body);
-    if (errors.length === 0) {
-        const { review, stars } = req.body;
-        editReview.review = review;
-        editReview.stars = stars;
-        editReview.save();
-        res.status(200);
-        res.json(editReview)
-    } else {
-        res.status(400);
-        const errResponse = {};
-        errors.forEach(er => {
-            errResponse[er[0]] = er[1];
-        });
-        res.json({
-            message: 'Validation Error',
-            errors: errResponse
-        })
-    }
+    res.status(404)
+    res.json({
+        message: "Review couldn't be found",
+        statusCode: 404
+    })
 });
 
 // Delete a Review
 router.delete('/:reviewId', requireAuth, async (req, res) => {
     const review = await Review.findByPk(req.params.reviewId);
 
-    if (review && (review.userId === req.user.id)) {
+    if (review) {
+         //Authorization
+         if (req.user.id !== review.userId) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
+         }
+
         await review.destroy();
         res.status(200)
         res.json({

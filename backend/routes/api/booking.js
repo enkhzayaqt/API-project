@@ -54,53 +54,64 @@ router.get('/current', requireAuth, async (req, res) => {
 // Edit a Booking
 router.put('/:bookingId', requireAuth, async (req, res, next) => {
     const { startDate, endDate } = req.body;
-    const editBooking = await Booking.findOne({
-        where: {
-            id: req.params.bookingId,
-            userId: req.user.id
-        }
-    });
+    const editBooking = await Booking.findByPk(req.params.bookingId);
+
     if (!editBooking) {
         res.status(404)
         res.json({
             message: "Booking couldn't be found",
             statusCode: 404
         })
-    } else if (startDate > endDate) {
-        res.status(400)
-        res.json({
-            message: "Validation error",
-            statusCode: 400,
-            errors: {
-                endDate: "endDate cannot come before startDate"
-            }
-        })
-    } else if (new Date(editBooking.endDate) < new Date()) {
-        res.status(403)
-        res.json({
-            message: "Past bookings can't be modified",
-            statusCode: 403
-        })
-
-    } else {
-        if (startDate) editBooking.startDate = startDate;
-        if (endDate) editBooking.endDate = endDate;
-        editBooking.save();
-        return res.json(editBooking)
     }
 
+    if (editBooking) {
+        //Authorization
+        if (editBooking.userId !== req.user.id) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
+        }
+
+        if (startDate > endDate) {
+            res.status(400)
+            res.json({
+                message: "Validation error",
+                statusCode: 400,
+                errors: {
+                    endDate: "endDate cannot come before startDate"
+                }
+            })
+        } else if (new Date(editBooking.endDate) < new Date()) {
+            res.status(403)
+            res.json({
+                message: "Past bookings can't be modified",
+                statusCode: 403
+            })
+
+        } else {
+            if (startDate) editBooking.startDate = startDate;
+            if (endDate) editBooking.endDate = endDate;
+            editBooking.save();
+            return res.json(editBooking)
+        }
+    }
 });
 
 // Delete a Booking
 router.delete('/:bookingId', requireAuth, async (req, res) => {
-    const booking = await Booking.findOne({
-        where: {
-            id: req.params.bookingId,
-            userId: req.user.id
-        }
-    });
+    const booking = await Booking.findByPk(req.params.bookingId);
 
     if (booking) {
+        // Authorization
+        if (booking.userId !== req.user.id) {
+            res.status(403)
+            res.json({
+                message: "Forbidden",
+                statusCode: 403
+            })
+        }
         if (new Date() > new Date(booking.startDate)) {
             res.status(403)
             res.json({
