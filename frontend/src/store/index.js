@@ -17,6 +17,7 @@ if (process.env.NODE_ENV === 'production') {
     enhancer = composeEnhancers(applyMiddleware(thunk, logger));
 }
 
+// This function will be used by index.js to attach the Redux store to the React application
 const configureStore = (preloadedState) => {
     return createStore(rootReducer, preloadedState, enhancer);
 };
