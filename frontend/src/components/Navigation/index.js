@@ -9,11 +9,10 @@ import './Navigation.css';
 
 
 function Navigation({ isLoaded }) {
-  console.log('isLoaded:  ', isLoaded);
   const sessionUser = useSelector(state => state.session.user);
-  console.log('sessionUser:   ', sessionUser)
+console.log('sessionUser', sessionUser)
+console.log('isLoaded', isLoaded)
 
-  
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
