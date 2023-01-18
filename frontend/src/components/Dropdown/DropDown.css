@@ -1,0 +1,20 @@
+#moreIcon {
+    width: 20px;
+    padding-right: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 5px;
+    right: 50px;
+}
+
+.dropdown-button {
+    cursor: pointer;
+    margin-top: -10px;
+}
+
+#dropdown-profile-pic {
+    width: 30px;
+    border-radius: 50%;
+}

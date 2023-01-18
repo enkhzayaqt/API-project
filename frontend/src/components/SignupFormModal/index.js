@@ -31,7 +31,7 @@ function SignupFormModal() {
   };
 
   return (
-    <>
+    <div className="signup-form-container">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <ul>
@@ -39,7 +39,7 @@ function SignupFormModal() {
         </ul>
         <label>
           Email
-          <input
+          <input className="input"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -48,7 +48,7 @@ function SignupFormModal() {
         </label>
         <label>
           Username
-          <input
+          <input className="input"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -57,7 +57,7 @@ function SignupFormModal() {
         </label>
         <label>
           First Name
-          <input
+          <input className="input"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -66,7 +66,7 @@ function SignupFormModal() {
         </label>
         <label>
           Last Name
-          <input
+          <input className="input"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -75,7 +75,7 @@ function SignupFormModal() {
         </label>
         <label>
           Password
-          <input
+          <input className="input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -84,7 +84,7 @@ function SignupFormModal() {
         </label>
         <label>
           Confirm Password
-          <input
+          <input className="input"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -93,7 +93,7 @@ function SignupFormModal() {
         </label>
         <button type="submit">Sign Up</button>
       </form>
-    </>
+    </div>
   );
 }
 

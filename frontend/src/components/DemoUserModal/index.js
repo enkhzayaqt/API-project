@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import "./LoginForm.css";
+import "./DemoUser.css";
 
-function LoginFormModal() {
+function DemoUserLogin() {
   const dispatch = useDispatch();
-  const [credential, setCredential] = useState("");
-  const [password, setPassword] = useState("");
+  const [credential, setCredential] = useState("Demo-lition");
+  const [password, setPassword] = useState("password");
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
@@ -25,17 +25,18 @@ function LoginFormModal() {
   };
 
   return (
-    <div className="login-container">
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="demo-container">
+      <h1 style={{ marginBottom: 0 }}>Demo User</h1>
+      <form className="form-container" onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => (
             <li key={idx}>{error}</li>
           ))}
         </ul>
         <label>
-          Username or Email
-          <input className="input"
+          <input
+            className="demo-input"
+            placeholder="Username or Email"
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
@@ -43,18 +44,23 @@ function LoginFormModal() {
           />
         </label>
         <label>
-          Password
-          <input className="input"
+          <input
+            className="demo-input"
+            placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </label>
-        <button type="submit">Log In</button>
+        <div className="login-button">
+          <button className="login-btn" type="submit">
+            Log in
+          </button>
+        </div>
       </form>
     </div>
   );
 }
 
-export default LoginFormModal;
+export default DemoUserLogin;

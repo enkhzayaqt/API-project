@@ -4,6 +4,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import DemoUserLogin from '../DemoUserModal'
 
 
 function ProfileButton({ user }) {
@@ -70,7 +71,14 @@ function ProfileButton({ user }) {
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
-            </li>
+              </li>
+              <li>
+              <OpenModalMenuItem
+                itemText="Demo User Login"
+                onItemClick={closeMenu}
+                modalComponent={<DemoUserLogin />}
+              />
+              </li>
           </>
         )}
       </ul>
