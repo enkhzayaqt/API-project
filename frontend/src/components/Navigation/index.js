@@ -5,6 +5,7 @@ import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import createSpot from '../CreateSpot';
 import './Navigation.css';
 
 
@@ -41,6 +42,16 @@ function Navigation({ isLoaded }) {
       {isLoaded && (
         <li>
           <ProfileButton user={sessionUser} />
+        </li>
+      )}
+
+      {sessionUser && (
+        <li>
+          <button onClick={() => {
+            window.location.href = "/spot/new"
+          }}>
+            Create spot
+          </button>
         </li>
       )}
     </ul>
