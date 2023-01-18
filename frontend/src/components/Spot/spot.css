@@ -2,7 +2,54 @@
     display: flex;
     flex-direction: column;
     margin-top: 16px;
-    border-radius: 8px;
     width: 250px;
     height: 300px;
+}
+
+.btn-delete-edit-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.thumb-img-container {
+    border-radius: 15px;
+    overflow: hidden;
+    width: 100%;
+    height: 160px;
+}
+
+.thumb-img {
+    width: 100%;
+}
+
+a.spot-thumb-link {
+    color: initial;
+    text-decoration: none;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.no-image-container {
+    width: 250px;
+    height: 160px;
+    background-color: #ccc;
+    position: relative;
+}
+
+.no-image-container span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spot-container .title {
+    font-weight: bold;
+    margin-top: 12px;
+}
+.spot-container .desc {
+    color:#333
+}
+.spot-container .price {
+    font-weight: bold;
 }

@@ -1,27 +1,25 @@
-import React, { useEffect } from "react";
-import { getSpotsThunk } from "../../store/spots";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
 import "./spot.css";
-import { useHistory } from "react-router-dom";
 
 const Spot = (props) => {
 
-    const { id, address, avgRating, city, country, discription, name, ownerId, previewImage, price, state } = props.data;
+    const { id, address, avgRating, city, country, description, name, ownerId, previewImage, price, state } = props.data;
     return (
         <div className="spot-container">
-            <div>Spot Id: {id}</div>
-            <div>{name}</div>
-            <div>
-                {previewImage !== 'no image yet' &&
-                    <img src={previewImage} width='200' />
-                }
-            </div>
-            <div>Address: {address}, {city}, {state}, { country}</div>
-            <div>Owner Id: {ownerId}</div>
-            <div>Rating: {avgRating}</div>
-            <div>Description: {discription}</div>
-            <div>Price: {price}</div>
+            <a href={`/spot/${id}`} className="spot-thumb-link">
+                <div className="thumb-img-container">
+                    {previewImage !== 'no image yet' ?
+                        <img src={previewImage} className="thumb-img" />
+                        :
+                        <div className="no-image-container"><span>No Image</span></div>
+                    }
+                </div>
+                <div className="title">{city}, {state}</div>
+                <div className="desc">{description}</div>
+                <div className="price">${price} night</div>
+            </a>
         </div>
+
     );
 };
 

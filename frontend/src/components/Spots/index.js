@@ -9,7 +9,6 @@ const Spots = () => {
     const dispatch = useDispatch();
     const spotsObj = useSelector((state) => state.spot.allSpots);
     const spots = Object.values(spotsObj);
-    const history = useHistory();
 
     useEffect(() => {
         dispatch(getSpotsThunk());
@@ -20,11 +19,9 @@ const Spots = () => {
         <div className="spot-container-root">
             {
                 spots.map((spot, idx) => {
-
                     return <Spot data={spot} key={idx} />
                 })
             }
-
         </div>
     );
 };
