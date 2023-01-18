@@ -18,7 +18,7 @@ module.exports = {
       {
         spotId: 2,
         url: 'https://a0.muscache.com/im/pictures/2adf6ef9-e131-431b-a34e-9566e768f509.jpg?im_w=720',
-        preview: false,
+        preview: true,
       },
       {
         spotId: 3,

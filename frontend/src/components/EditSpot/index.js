@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { addImageThunk, createSpotThunk } from "../../store/spots";
-import "./createSpot.css";
+import { useHistory, useParams } from "react-router-dom";
+import { addImageThunk, editSpotThunk } from "../../store/spots";
+import './EditSpot.css'
 
-const CreateSpot = () => {
+const EditSpot = () => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const { spotId } = useParams();
     const user = useSelector((state) => state?.session?.user);
-    console.log('user: ', user)
+    const oldSpot = useSelector((state) => state.spot);
 
-    // const spotsObj = useSelector((state) => state.spot.allSpots);
-    // const spots = Object.values(spotsObj);
-
-    const [name, setName] = useState("");
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [state, setState] = useState("");
-    const [country, setCountry] = useState("");
-    const [price, setPrice] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
-    const [description, setDescription] = useState("");
+    const [name, setName] = useState(oldSpot.spotDetails.name);
+    const [address, setAddress] = useState(oldSpot.spotDetails.address);
+    const [city, setCity] = useState(oldSpot.spotDetails.city);
+    const [state, setState] = useState(oldSpot.spotDetails.state);
+    const [country, setCountry] = useState(oldSpot.spotDetails.country);
+    const [price, setPrice] = useState(oldSpot.spotDetails.price);
+    const [imageUrl, setImageUrl] = useState(oldSpot.spotDetails.imageUrl);
+    const [description, setDescription] = useState(oldSpot.spotDetails.description);
     const [errors, setErrors] = useState([]);
 
 
@@ -39,18 +37,41 @@ const CreateSpot = () => {
             price,
         };
 
-        const createdSpot = await dispatch(createSpotThunk(newSpot));
+        const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
 
-        if (createdSpot && imageUrl) {
-            const image = {
-                url: imageUrl,
-                preview: "true"
-            }
-
-            await dispatch(addImageThunk(image, createdSpot.id));
-            history.push(`/spot/${createdSpot.id}`)
-        }
+    if (editedSpot) {
+      history.push(`/spot/${spotId}`);
     }
+
+        // if (editedSpot && imageUrl) {
+        //     const image = {
+        //         url: imageUrl,
+        //         preview: "true"
+        //     }
+
+        //     await dispatch(addImageThunk(image, editedSpot.id));
+        //     history.push(`/spot/${editedSpot.id}`)
+        // }
+    }
+
+      // set the form with spot previous details
+//   useEffect(() => {
+//     if (Object.keys(oldSpot).length > 0) {
+//       const { name, address, city, state, country, price, description } = oldSpot;
+//       setName(name);
+//       setAddress(address);
+//       setCity(city);
+//       setState(state);
+//       setCountry(country);
+//       setPrice(price);
+//       setDescription(description);
+//     }
+//   }, [oldSpot]);
+
+//   useEffect(() => {
+//     dispatch(getSpotDetailsThunk(spotId));
+//   }, [dispatch, spotId]);
+
 
     useEffect(() => {
         const errors = [];
@@ -67,12 +88,12 @@ const CreateSpot = () => {
 
     const cancel = (e) => {
         e.preventDefault();
-        history.push(`/`);
+        history.push(`/spot/${spotId}`);
     };
 
     return (
         <div>
-            <h1>Create Spot</h1>
+            <h1>Edit Spot</h1>
             <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>
                 <label> Spot Name:
@@ -140,10 +161,10 @@ const CreateSpot = () => {
                     />
                 </label>
                 <button onClick={(e) => cancel(e)}>Cancel</button>
-                <button disabled={errors.length > 0} type="submit">Submit</button>
+                <button disabled={errors.length > 0} type="submit">Save Edit</button>
             </form>
         </div>
     );
 };
 
-export default CreateSpot;
+export default EditSpot;

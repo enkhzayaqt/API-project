@@ -8,6 +8,7 @@ import CreateSpot from './components/CreateSpot'
 import HeaderBar from './components/HeaderBar';
 import "./index.css"
 import SpotDetails from "./components/SpotDetails";
+import EditSpot from "./components/EditSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,11 +27,14 @@ function App() {
           <Route exact path="/">
             <Spots />
           </Route>
+          <Route exact path="/spot/new">
+            <CreateSpot />
+          </Route>
+          <Route exact path="/spot/:spotId/edit">
+              <EditSpot />
+            </Route>
           <Route exact path="/spot/:id">
             <SpotDetails />
-          </Route>
-          <Route path="/spot/new">
-            <CreateSpot />
           </Route>
         </Switch>
       )}

@@ -18,8 +18,8 @@ module.exports = {
         country: 'USA',
         lat: 123446,
         lng: 1233456,
-        name: 'Arbor',
-        description: 'apartment',
+        name: 'Private room in nature lodge',
+        description: 'Spend your next vacation sipping coffee by the largest freshwater Lake in the world! This beautiful lodge is a perfect getaway into the wild side, while being in a centralized location close to natural and commercial attractions. ',
         price: 150
       },
       {
@@ -30,8 +30,8 @@ module.exports = {
         country: 'USA',
         lat: 123446,
         lng: 1233456,
-        name: 'Harold',
-        description: 'townhouse',
+        name: 'Lakefront Cottage with Private Beach',
+        description: 'Come and enjoy this cozy and peaceful cottage with amazing views from every room! This house sits on a private 132 feet beach with a large  patio. Start your day with a cup of coffee on the porch.  ',
         price: 250
       },
       {
@@ -42,8 +42,8 @@ module.exports = {
         country: 'USA',
         lat: 123446,
         lng: 1233456,
-        name: 'Walter',
-        description: 'House',
+        name: 'Magnificent 2BD Apartment ',
+        description: 'Modern 2 bedroom 2 bathroom apartment offers stunning views of downtown New York skyline, from a convenient prime location in Downtown neighborhood, close to the Time Square and within walking distance of cultural city landmarks.',
         price: 350
       },
     ], {});
