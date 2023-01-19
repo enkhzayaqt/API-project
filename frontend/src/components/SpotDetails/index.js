@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { deleteReviewThunk, getReviewsThunk } from "../../store/review";
-import { deleteSpotThunk, getSpotDetailsThunk } from "../../store/spots";
+import { deleteSpotThunk, getSpotDetailsThunk, getSpotsThunk } from "../../store/spots";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import ReviewFormModal from "../ReviewFormModal";
 import EditReviewModal from '../EditReviewModal';
@@ -27,9 +27,10 @@ const SpotDetails = () => {
         ratingDom.push(<i class="fas fa-star rating-color"></i>);
     }
 
-    const deleteSpot = (e) => {
-        e.preventDefault();
+    const deleteSpot = () => {
         dispatch(deleteSpotThunk(spotId));
+        //refresh
+        dispatch(getSpotsThunk());
         history.push(`/`);
     };
 
