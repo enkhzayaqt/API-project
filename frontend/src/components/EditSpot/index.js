@@ -39,39 +39,10 @@ const EditSpot = () => {
 
         const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
 
-    if (editedSpot) {
-      history.push(`/spot/${spotId}`);
+        if (editedSpot) {
+            history.push(`/spot/${spotId}`);
+        }
     }
-
-        // if (editedSpot && imageUrl) {
-        //     const image = {
-        //         url: imageUrl,
-        //         preview: "true"
-        //     }
-
-        //     await dispatch(addImageThunk(image, editedSpot.id));
-        //     history.push(`/spot/${editedSpot.id}`)
-        // }
-    }
-
-      // set the form with spot previous details
-//   useEffect(() => {
-//     if (Object.keys(oldSpot).length > 0) {
-//       const { name, address, city, state, country, price, description } = oldSpot;
-//       setName(name);
-//       setAddress(address);
-//       setCity(city);
-//       setState(state);
-//       setCountry(country);
-//       setPrice(price);
-//       setDescription(description);
-//     }
-//   }, [oldSpot]);
-
-//   useEffect(() => {
-//     dispatch(getSpotDetailsThunk(spotId));
-//   }, [dispatch, spotId]);
-
 
     useEffect(() => {
         const errors = [];
@@ -93,6 +64,7 @@ const EditSpot = () => {
 
     return (
         <div>
+            <button onClick={() => { history.push('/') }}>Back</button>
             <h1>Edit Spot</h1>
             <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>
@@ -144,18 +116,10 @@ const EditSpot = () => {
                         onChange={(e) => setPrice(e.target.value)}
                     />
                 </label>
-                <label> Spot Image:
-                    <input className="input"
-                        type="url"
-                        placeholder="Image"
-                        value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
-                    />
-                </label>
-                <label> Discription:
+                <label> Description:
                     <input className="input"
                         type="text"
-                        placeholder="Discription"
+                        placeholder="Description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />

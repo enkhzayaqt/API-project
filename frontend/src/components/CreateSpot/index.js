@@ -8,10 +8,6 @@ const CreateSpot = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector((state) => state?.session?.user);
-    console.log('user: ', user)
-
-    // const spotsObj = useSelector((state) => state.spot.allSpots);
-    // const spots = Object.values(spotsObj);
 
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
@@ -22,7 +18,6 @@ const CreateSpot = () => {
     const [imageUrl, setImageUrl] = useState("");
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState([]);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -72,75 +67,84 @@ const CreateSpot = () => {
 
     return (
         <div>
+            <button onClick={() => { history.push('/') }}>Back</button>
             <h1>Create Spot</h1>
             <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>
-                <label> Spot Name:
-                    <input className="input"
-                        type="text"
-                        placeholder="Spot Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </label>
-                <label> Spot address:
-                    <input className="input"
-                        type="text"
-                        placeholder="Spot address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
-                </label>
-                <label> City:
-                    <input className="input"
-                        type="text"
-                        placeholder="City"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                    />
-                </label>
-                <label> State:
-                    <input className="input"
-                        type="text"
-                        placeholder="State"
-                        value={state}
-                        onChange={(e) => setState(e.target.value)}
-                    />
-                </label>
-                <label> Country:
-                    <input className="input"
-                        type="text"
-                        placeholder="Country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                    />
-                </label>
-                <label> Price:
-                    <input className="input"
-                        type="number"
-                        placeholder="Price"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                    />
-                </label>
-                <label> Spot Image:
-                    <input className="input"
-                        type="url"
-                        placeholder="Image"
-                        value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
-                    />
-                </label>
-                <label> Discription:
-                    <input className="input"
-                        type="text"
-                        placeholder="Discription"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </label>
-                <button onClick={(e) => cancel(e)}>Cancel</button>
-                <button disabled={errors.length > 0} type="submit">Submit</button>
+                <div className="create-spot-content">
+                    <div className="column">
+                        <label> Spot Name:
+                            <input className="input"
+                                type="text"
+                                placeholder="Spot Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </label>
+                        <label> Spot address:
+                            <input className="input"
+                                type="text"
+                                placeholder="Spot address"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </label>
+                        <label> Spot Image:
+                            <input className="input"
+                                type="url"
+                                placeholder="Image"
+                                value={imageUrl}
+                                onChange={(e) => setImageUrl(e.target.value)}
+                            />
+                        </label>
+                        <label> Description:
+                            <input className="input"
+                                type="text"
+                                placeholder="Description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </label>
+                    </div>
+                    <div className="column">
+                        <label> City:
+                            <input className="input"
+                                type="text"
+                                placeholder="City"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </label>
+                        <label> State:
+                            <input className="input"
+                                type="text"
+                                placeholder="State"
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                            />
+                        </label>
+                        <label> Country:
+                            <input className="input"
+                                type="text"
+                                placeholder="Country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                            />
+                        </label>
+                        <label> Price:
+                            <input className="input"
+                                type="number"
+                                placeholder="Price"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                            />
+                        </label>
+                        <div className="margin-top-10" style={{ float: 'right' }}>
+                            <button className="btn btn-grey" style={{ marginRight: 15 }} onClick={(e) => cancel(e)}>Cancel</button>
+                            <button className="btn btn-primary" disabled={errors.length > 0} type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     );

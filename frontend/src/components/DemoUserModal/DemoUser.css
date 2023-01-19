@@ -6,19 +6,10 @@
 }
 
 .demo-container{
-    display: flex;
-    flex-direction: column;
-    width: 40vw;
-    height: 60vh;
-    padding: 0px 16px 16px 16px;
-    overflow: auto;
 }
 
 .demo-input {
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    margin: 4px 0;
+
 }
 .demo-button {
     border: none;
