@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getReviewsThunk } from "../../store/review";
+import { deleteReviewThunk, getReviewsThunk } from "../../store/review";
 import { deleteSpotThunk, getSpotDetailsThunk } from "../../store/spots";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import ReviewFormModal from "../ReviewFormModal";
+import EditReviewModal from '../EditReviewModal';
 import "./SpotDetails.css";
 
 const SpotDetails = () => {
@@ -37,6 +38,17 @@ const SpotDetails = () => {
         history.push(`/spot/${spotId}/edit`);
     };
 
+    const deleteReview = (reviewId) => {
+        dispatch(deleteReviewThunk(reviewId));
+        //refresh
+        dispatch(getSpotDetailsThunk(spotId));
+        dispatch(getReviewsThunk(spotId));
+    };
+
+    const editReview = (e) => {
+        e.preventDefault();
+        history.push(`/spot/${spotId}/edit`);
+    };
     // const addReview = (e) => {
     //     e.preventDefault();
     //     history.push()
@@ -56,9 +68,22 @@ const SpotDetails = () => {
 
     return (
         <div className="spot-details-container">
-            <button onClick={() => history.push("/")}>
-                Back
-            </button>
+            <div className="back-edit-delete-btn-container">
+                <button onClick={() => history.push("/")}>
+                    Back
+                </button>
+                {user?.id == ownerId &&
+                    <div className="btn-delete-edit-container">
+                        <button className="button-delete" onClick={(e) => deleteSpot(e)}>
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <button className="button-edit" onClick={(e) => editSpot(e)}>
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+
             <div>{name}</div>
             <div>{city} {state} {country}</div>
             <div>
@@ -69,6 +94,8 @@ const SpotDetails = () => {
             <div>Hosted by {Owner?.firstName} {Owner?.lastName}</div>
             <div>Description: {description}</div>
             <div>Price: ${price} night</div>
+
+            {/* Review section */}
             <div>
                 <div className="review-container">
                     <div className="review-header">
@@ -78,46 +105,62 @@ const SpotDetails = () => {
                             </h4>
                         }
                         <h4> - {numReviews} Reviews</h4>
-                        {user &&
-                            <OpenModalMenuItem
-                                itemText="Write a review"
-                                onItemClick={openNewReviewModal}
-                                modalComponent={<ReviewFormModal spotId={spotId} callbackClose={() => OnModalClose()} />}
-                            />
-                        }
+
+                        <div className="write-review-modal">
+                            {user &&
+                                <OpenModalMenuItem
+                                    itemText="Write a review"
+                                    onItemClick={openNewReviewModal}
+                                    modalComponent={<ReviewFormModal spotId={spotId} callbackClose={() => OnModalClose()} />}
+                                />
+                            }
+                        </div>
                     </div>
                     <div className="review-body">
                         {
                             spotReviews?.map((review, idx) => {
                                 return (
                                     <div key={idx}>
+
                                         <div>
-                                            {review.review}
+                                            Stars: {review.stars}
                                         </div>
+                                        <div>User Id: {review.userId}</div>
                                         <div>
-                                            {review.stars}
+                                            Review: {review.review}
                                         </div>
-                                        <div>{review.userId}</div>
-                                        <div>{review.createdAt}</div>
+                                        <div>Created at: {review.createdAt}</div>
+                                        <div>
+                                            {user?.id == review.userId &&
+                                                <div className="edit-delete-review-btn-container">
+                                                <button>
+                                                <OpenModalMenuItem
+                                                        itemText="Edit review"
+                                                        onItemClick={openNewReviewModal}
+                                                        modalComponent={<EditReviewModal reviewId={review.id} review={review.review} stars={review.stars} callbackClose={() => OnModalClose()} />}
+                                                    />
+                                                </button>
+
+                                                    <div className="btn-delete-edit-container">
+                                                        <button className="button-delete" onClick={() => deleteReview(review.id)}>
+                                                            Delete review
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <br/>
                                     </div>
                                 )
 
                             })
                         }
+
                     </div>
                 </div>
             </div>
 
-            {user?.id == ownerId &&
-                <div className="btn-delete-edit-container">
-                    <button className="button-delete" onClick={(e) => deleteSpot(e)}>
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                    <button className="button-edit" onClick={(e) => editSpot(e)}>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                </div>
-            }
+
         </div>
     );
 };

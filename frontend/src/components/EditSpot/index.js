@@ -64,7 +64,7 @@ const EditSpot = () => {
 
     return (
         <div>
-            <button onClick={() => { history.push('/') }}>Back</button>
+            <button onClick={() => { history.push(`/spot/${spotId}`) }}>Back</button>
             <h1>Edit Spot</h1>
             <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>

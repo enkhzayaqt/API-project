@@ -21,9 +21,9 @@ export const deleteReview = (reviewId) => ({
     reviewId
 })
 
-export const editReview = (reviewId) => ({
+export const editReview = (review) => ({
     type: EDIT_REVIEW,
-    reviewId
+    review
 })
 
 
@@ -59,11 +59,11 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
     }
 }
 
-export const editReviewThunk = (input, reviewId) => async (dispatch) => {
+export const editReviewThunk = (data, reviewId) => async (dispatch) => {
     const response = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: 'PUT',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input)
+        body: JSON.stringify(data)
     })
     if (response.ok) {
         const editedReview = await response.json();

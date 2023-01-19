@@ -140,7 +140,7 @@ const CreateSpot = () => {
                             />
                         </label>
                         <div className="margin-top-10" style={{ float: 'right' }}>
-                            <button className="btn btn-grey" style={{ marginRight: 15 }} onClick={(e) => cancel(e)}>Cancel</button>
+                            <button className="btn btn-blue" style={{ marginRight: 15 }} onClick={(e) => cancel(e)}>Cancel</button>
                             <button className="btn btn-primary" disabled={errors.length > 0} type="submit">Submit</button>
                         </div>
                     </div>
