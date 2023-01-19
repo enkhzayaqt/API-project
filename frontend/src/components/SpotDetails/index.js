@@ -44,6 +44,7 @@ const SpotDetails = () => {
         //refresh
         dispatch(getSpotDetailsThunk(spotId));
         dispatch(getReviewsThunk(spotId));
+        history.push(`/spot/${spotId}`);
     };
 
     const editReview = (e) => {
