@@ -23,3 +23,26 @@
     justify-content: flex-start;
     gap: 10px;
 }
+
+.back-edit-delete-btn-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.write-review-modal {
+    cursor: pointer;
+    border: 1px solid blue;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.review-body {
+    list-style: none;
+   
+}
+
+.edit-delete-review-btn-container {
+    display: flex;
+    flex-direction: row;
+}

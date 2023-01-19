@@ -57,8 +57,8 @@ body {
     background-color: #FF385C;
 }
 
-.btn-grey {
-    background-color: #bbb;
+.btn-blue {
+    background-color: rgb(88, 88, 248)
 }
 
 button:disabled,
