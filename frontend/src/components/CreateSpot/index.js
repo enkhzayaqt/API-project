@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { addImageThunk, createSpotThunk } from "../../store/spots";
 import { useSelector, useDispatch } from "react-redux";
-import "./createSpot.css";
 import { useHistory } from "react-router-dom";
-import Spot from "../Spot";
+import { addImageThunk, createSpotThunk } from "../../store/spots";
+import "./createSpot.css";
 
 const CreateSpot = () => {
     const dispatch = useDispatch();
-    // const spotsObj = useSelector((state) => state.spot.allSpots);
-    // const spots = Object.values(spotsObj);
     const history = useHistory();
+    const user = useSelector((state) => state?.session?.user);
 
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
@@ -21,12 +19,10 @@ const CreateSpot = () => {
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState([]);
 
-    const user = useSelector((state) => state?.session?.user);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newSpot = {
-            ownerId: user,
+            ownerId: user.id,
             address,
             city,
             state,
@@ -37,16 +33,17 @@ const CreateSpot = () => {
             description,
             price,
         };
-        const createdSpot = dispatch(createSpotThunk(newSpot));
+
+        const createdSpot = await dispatch(createSpotThunk(newSpot));
 
         if (createdSpot && imageUrl) {
             const image = {
                 url: imageUrl,
-                preview: true
+                preview: "true"
             }
 
             await dispatch(addImageThunk(image, createdSpot.id));
-            history.push(`/spots/${createdSpot.id}`)
+            history.push(`/spot/${createdSpot.id}`)
         }
     }
 
@@ -61,79 +58,93 @@ const CreateSpot = () => {
         if (description?.length === 0) errors.push("Please enter a description");
 
         setErrors(errors);
-    },[name, address, city, state, country, price, description]);
+    }, [name, address, city, state, country, price, description]);
 
+    const cancel = (e) => {
+        e.preventDefault();
+        history.push(`/`);
+    };
 
     return (
         <div>
+            <button onClick={() => { history.push('/') }}>Back</button>
             <h1>Create Spot</h1>
-            <ul>{errors.map((error, idx) => <li key={idx}>{error}</li>)}</ul>
+            <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>
-                <label> Spot Name:
-                    <input
-                        type="text"
-                        placeholder="Spot Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </label>
-                <label> Spot address:
-                    <input
-                        type="text"
-                        placeholder="Spot address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
-                </label>
-                <label> City:
-                    <input
-                        type="text"
-                        placeholder="City"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                    />
-                </label>
-                <label> State:
-                    <input
-                        type="text"
-                        placeholder="State"
-                        value={state}
-                        onChange={(e) => setState(e.target.value)}
-                    />
-                </label>
-                <label> Country:
-                    <input
-                        type="text"
-                        placeholder="Country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                    />
-                </label>
-                <label> Price:
-                    <input
-                        type="number"
-                        placeholder="Price"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                    />
-                </label>
-                <label> Spot Image:
-                    <input
-                        type="url"
-                        placeholder="Image"
-                        value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
-                    />
-                </label>
-                <label> Discription:
-                    <input
-                        type="text"
-                        placeholder="Discription"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
+                <div className="create-spot-content">
+                    <div className="column">
+                        <label> Spot Name:
+                            <input className="input"
+                                type="text"
+                                placeholder="Spot Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </label>
+                        <label> Spot address:
+                            <input className="input"
+                                type="text"
+                                placeholder="Spot address"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </label>
+                        <label> Spot Image:
+                            <input className="input"
+                                type="url"
+                                placeholder="Image"
+                                value={imageUrl}
+                                onChange={(e) => setImageUrl(e.target.value)}
+                            />
+                        </label>
+                        <label> Description:
+                            <input className="input"
+                                type="text"
+                                placeholder="Description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </label>
+                    </div>
+                    <div className="column">
+                        <label> City:
+                            <input className="input"
+                                type="text"
+                                placeholder="City"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </label>
+                        <label> State:
+                            <input className="input"
+                                type="text"
+                                placeholder="State"
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                            />
+                        </label>
+                        <label> Country:
+                            <input className="input"
+                                type="text"
+                                placeholder="Country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                            />
+                        </label>
+                        <label> Price:
+                            <input className="input"
+                                type="number"
+                                placeholder="Price"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                            />
+                        </label>
+                        <div className="margin-top-10" style={{ float: 'right' }}>
+                            <button className="btn btn-grey" style={{ marginRight: 15 }} onClick={(e) => cancel(e)}>Cancel</button>
+                            <button className="btn btn-primary" disabled={errors.length > 0} type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     );

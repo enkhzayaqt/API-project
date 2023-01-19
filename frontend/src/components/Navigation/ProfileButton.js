@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import * as sessionActions from '../../store/session';
+import * as spotActions from '../../store/spots';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import DemoUserLogin from '../DemoUserModal'
-
+import './Navigation.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
+  const sessionUser = useSelector(state => state.session.user);
+
 
   const openMenu = () => {
     if (showMenu) return;
@@ -39,46 +44,40 @@ function ProfileButton({ user }) {
     closeMenu();
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const createSpot = (e) => {
+    e.preventDefault();
+    history.push("/spot/new");
+  };
 
   return (
     <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className={ulClassName} ref={ulRef}>
-        {user ? (
+      <ul id="menu-dropdown" ref={ulRef}>
+        {sessionUser ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
+            <li className="info-li"><i className="far fa-user" /> {sessionUser.username}</li>
+            <li className="info-li"><i className="far fa-face-smile" /> {sessionUser.firstName} {sessionUser.lastName}</li>
+            <li className="info-li"><i className="far fa-envelope" /> {sessionUser.email}</li>
+            <li className="info-li section-li"></li>
+            <li onClick={(e) => createSpot(e)}><i className="far fa-plus" /> Create spot</li>
+            <li onClick={logout}><i class="fa-solid fa-right-from-bracket"></i> Log Out</li>
           </>
         ) : (
           <>
-            <li>
-              <OpenModalMenuItem
-                itemText="Log In"
-                onItemClick={closeMenu}
-                modalComponent={<LoginFormModal />}
-              />
-            </li>
-            <li>
-              <OpenModalMenuItem
-                itemText="Sign Up"
-                onItemClick={closeMenu}
-                modalComponent={<SignupFormModal />}
-              />
-              </li>
-              <li>
-              <OpenModalMenuItem
-                itemText="Demo User Login"
-                onItemClick={closeMenu}
-                modalComponent={<DemoUserLogin />}
-              />
-              </li>
+            <OpenModalMenuItem
+              itemText="Log In"
+              onItemClick={closeMenu}
+              modalComponent={<LoginFormModal />}
+            />
+            <OpenModalMenuItem
+              itemText="Sign Up"
+              onItemClick={closeMenu}
+              modalComponent={<SignupFormModal />}
+            />
+            <OpenModalMenuItem
+              itemText="Demo User Login"
+              onItemClick={closeMenu}
+              modalComponent={<DemoUserLogin />}
+            />
           </>
         )}
       </ul>

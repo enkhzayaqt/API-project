@@ -26,7 +26,7 @@ function DemoUserLogin() {
 
   return (
     <div className="demo-container">
-      <h1 style={{ marginBottom: 0 }}>Demo User</h1>
+      <h1 className="title">Demo User Login</h1>
       <form className="form-container" onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => (
@@ -35,7 +35,7 @@ function DemoUserLogin() {
         </ul>
         <label>
           <input
-            className="demo-input"
+            className="input"
             placeholder="Username or Email"
             type="text"
             value={credential}
@@ -45,7 +45,7 @@ function DemoUserLogin() {
         </label>
         <label>
           <input
-            className="demo-input"
+            className="input"
             placeholder="Password"
             type="password"
             value={password}
@@ -53,11 +53,9 @@ function DemoUserLogin() {
             required
           />
         </label>
-        <div className="login-button">
-          <button className="login-btn" type="submit">
-            Log in
-          </button>
-        </div>
+        <button className="btn btn-primary margin-top-10" type="submit">
+          Log in
+        </button>
       </form>
     </div>
   );

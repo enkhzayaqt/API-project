@@ -1,6 +1,11 @@
 /* Site wide styles */
-body{
+body {
     font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
 }
 
 .input {
@@ -11,4 +16,54 @@ body{
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+.textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
+#modal-content {
+    width: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 25px;
+}
+
+#modal-content .title {
+    margin-top: 0
+}
+
+.btn {
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn:hover {
+    filter: brightness(90%);
+}
+
+.btn-primary {
+    background-color: #FF385C;
+}
+
+.btn-grey {
+    background-color: #bbb;
+}
+
+button:disabled,
+button[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
 }

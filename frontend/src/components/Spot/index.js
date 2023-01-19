@@ -1,9 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import "./spot.css";
 
 const Spot = (props) => {
+    const user = useSelector((state) => state.session.user);
 
-    const { id, address, avgRating, city, country, description, name, ownerId, previewImage, price, state } = props.data;
+    const { id, avgRating, city, description, previewImage, price, state } = props.data;
+    const intRating = !isNaN(avgRating) ? Math.floor(avgRating) : 0;
+    const ratingDom = [];
+    for (let i = 0; i < intRating; i++) {
+        ratingDom.push(<i class="fas fa-star rating-color"></i>);
+    }
     return (
         <div className="spot-container">
             <a href={`/spot/${id}`} className="spot-thumb-link">
@@ -14,10 +21,26 @@ const Spot = (props) => {
                         <div className="no-image-container"><span>No Image</span></div>
                     }
                 </div>
-                <div className="title">{city}, {state}</div>
+                <div className="address-review-container">
+                    <div className="title">{city}, {state}</div>
+                    <div className="review-container">
+                        {intRating > 0 &&
+                            <h4>
+                                {ratingDom} {avgRating.toFixed(1)}
+                            </h4>
+                        }
+                        {intRating == 0 &&
+                            <h4>
+                                0.0
+                            </h4>
+                        }
+                    </div>
+                </div>
+
                 <div className="desc">{description}</div>
                 <div className="price">${price} night</div>
             </a>
+
         </div>
 
     );

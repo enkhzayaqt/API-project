@@ -1,0 +1,8 @@
+.create-spot-content {
+    display: flex;
+}
+
+.column {
+    width: 50%;
+    margin: 25px;
+}

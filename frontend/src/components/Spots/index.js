@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { getSpotsThunk } from "../../store/spots";
 import { useSelector, useDispatch } from "react-redux";
-import "./spots.css";
-import { useHistory } from "react-router-dom";
 import Spot from "../Spot";
+import "./spots.css";
 
 const Spots = () => {
     const dispatch = useDispatch();

@@ -59,7 +59,7 @@ export const getSpotDetailsThunk = (spotId) => async (dispatch) => {
 };
 
 export const createSpotThunk = (userInput) => async (dispatch) => {
-    const response = await csrfFetch('/api/spots', {
+    const response = await csrfFetch('/api/spots/', {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userInput)
@@ -71,11 +71,11 @@ export const createSpotThunk = (userInput) => async (dispatch) => {
     }
 }
 
-export const addImageThunk = (image, spotId) => async (dispatch) => {
+export const addImageThunk = (input, spotId) => async (dispatch) => {
     const response = await csrfFetch(`/api/spots/${spotId}/images`, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(image)
+        body: JSON.stringify(input)
     })
     if (response.ok) {
         const image = await response.json();
@@ -127,12 +127,11 @@ export default function spotsReducer(state = initialState, action) {
                 allSpots: newState
             }
         }
-        case CREATE_SPOT: {
+        case CREATE_SPOT:
             return {
                 ...state,
                 [action.spot.id]: action.spot
             }
-        }
         case ADD_IMAGE:
             return {
                 ...state,

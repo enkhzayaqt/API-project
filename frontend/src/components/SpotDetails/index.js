@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getSpotDetailsThunk } from "../../store/spots";
+import { getReviewsThunk } from "../../store/review";
+import { deleteSpotThunk, getSpotDetailsThunk } from "../../store/spots";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import ReviewFormModal from "../ReviewFormModal";
 import "./SpotDetails.css";
 
 const SpotDetails = () => {
@@ -10,25 +13,53 @@ const SpotDetails = () => {
 
     const dispatch = useDispatch();
     const spotDetails = useSelector((state) => state.spot.spotDetails);
-    const user = useSelector((state) => state.session.user);
+    const spotReviews = useSelector((state) => state.review.spotReviews.Reviews);
 
-    console.log("spotDetails", spotDetails)
-    console.log("user", user)
+    const user = useSelector((state) => state.session.user);
     const history = useHistory();
 
+    const { avgStarRating, numReviews, city, country, description, Owner, ownerId, name, SpotImages, price, state } = spotDetails;
+    const intRating = !isNaN(avgStarRating) ? Math.floor(avgStarRating) : 0;
+
+    const ratingDom = [];
+    for (let i = 0; i < intRating; i++) {
+        ratingDom.push(<i class="fas fa-star rating-color"></i>);
+    }
+
+    const deleteSpot = (e) => {
+        e.preventDefault();
+        dispatch(deleteSpotThunk(spotId));
+        history.push(`/`);
+    };
+
+    const editSpot = (e) => {
+        e.preventDefault();
+        history.push(`/spot/${spotId}/edit`);
+    };
+
+    // const addReview = (e) => {
+    //     e.preventDefault();
+    //     history.push()
+    // }
     useEffect(() => {
         dispatch(getSpotDetailsThunk(spotId));
+        dispatch(getReviewsThunk(spotId));
     }, []);
 
+    const openNewReviewModal = () => {
+    };
 
-    const { avgStarRating, numReviews, city, country, description, Owner, ownerId, name, SpotImages, price, state } = spotDetails;
+    const OnModalClose = () => {
+        dispatch(getSpotDetailsThunk(spotId));
+        dispatch(getReviewsThunk(spotId));
+    }
+
     return (
         <div className="spot-details-container">
             <button onClick={() => history.push("/")}>
                 Back
             </button>
             <div>{name}</div>
-            <div>star:{avgStarRating} reviewNum:{numReviews}</div>
             <div>{city} {state} {country}</div>
             <div>
                 {SpotImages && SpotImages.length > 0 &&
@@ -37,18 +68,56 @@ const SpotDetails = () => {
             </div>
             <div>Hosted by {Owner?.firstName} {Owner?.lastName}</div>
             <div>Description: {description}</div>
-            <div>Price: {price}</div>
+            <div>Price: ${price} night</div>
+            <div>
+                <div className="review-container">
+                    <div className="review-header">
+                        {intRating > 0 &&
+                            <h4>
+                                {ratingDom} {avgStarRating.toFixed(1)}
+                            </h4>
+                        }
+                        <h4> - {numReviews} Reviews</h4>
+                        {user &&
+                            <OpenModalMenuItem
+                                itemText="Write a review"
+                                onItemClick={openNewReviewModal}
+                                modalComponent={<ReviewFormModal spotId={spotId} callbackClose={() => OnModalClose()} />}
+                            />
+                        }
+                    </div>
+                    <div className="review-body">
+                        {
+                            spotReviews?.map((review, idx) => {
+                                return (
+                                    <div key={idx}>
+                                        <div>
+                                            {review.review}
+                                        </div>
+                                        <div>
+                                            {review.stars}
+                                        </div>
+                                        <div>{review.userId}</div>
+                                        <div>{review.createdAt}</div>
+                                    </div>
+                                )
+
+                            })
+                        }
+                    </div>
+                </div>
+            </div>
+
             {user?.id == ownerId &&
                 <div className="btn-delete-edit-container">
-                    <button className="button-delete">
+                    <button className="button-delete" onClick={(e) => deleteSpot(e)}>
                         <i class="fa-solid fa-trash"></i>
                     </button>
-                    <button className="button-edit">
+                    <button className="button-edit" onClick={(e) => editSpot(e)}>
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                 </div>
             }
-
         </div>
     );
 };
