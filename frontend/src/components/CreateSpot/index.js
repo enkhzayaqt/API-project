@@ -67,7 +67,10 @@ const CreateSpot = () => {
 
     return (
         <div>
-            <button onClick={() => { history.push('/') }}>Back</button>
+            <button className="btn btn-blue" onClick={() => { history.push('/') }}>
+                    <i className="fa-solid fa-chevron-left"></i><span style={{ marginLeft: 10 }}>Back</span>
+            </button>
+
             <h1>Create Spot</h1>
             <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>

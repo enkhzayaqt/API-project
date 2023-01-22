@@ -58,6 +58,7 @@
 #menu-dropdown li.info-li {
     cursor: default;
     padding: 10px 20px;
+    white-space: nowrap;
 }
 
 #menu-dropdown li.info-li:hover {

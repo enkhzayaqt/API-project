@@ -71,8 +71,8 @@ const SpotDetails = () => {
     return (
         <div className="spot-details-container">
             <div className="back-edit-delete-btn-container">
-                <button onClick={() => history.push("/")}>
-                    Back
+                <button className="btn btn-blue" onClick={() => history.push("/")}>
+                    <i className="fa-solid fa-chevron-left"></i><span style={{ marginLeft: 10 }}>Back</span>
                 </button>
                 {user?.id == ownerId &&
                     <div className="btn-delete-edit-container">
@@ -121,27 +121,28 @@ const SpotDetails = () => {
                     <div className="review-body">
                         {
                             spotReviews?.map((review, idx) => {
+                                const reviewDate = new Date(review.createdAt);
                                 return (
                                     <div key={idx}>
 
                                         <div>
                                             Stars: {review.stars}
                                         </div>
-                                        <div>User Id: {review.userId}</div>
+                                        <div>User: {review.User.firstName} {review.User.lastName}</div>
                                         <div>
                                             Review: {review.review}
                                         </div>
-                                        <div>Created at: {review.createdAt}</div>
+                                        <div>Created at: {reviewDate.toDateString()}</div>
                                         <div>
                                             {user?.id == review.userId &&
                                                 <div className="edit-delete-review-btn-container">
-                                                <button>
-                                                <OpenModalMenuItem
-                                                        itemText="Edit review"
-                                                        onItemClick={openNewReviewModal}
-                                                        modalComponent={<EditReviewModal reviewId={review.id} review={review.review} stars={review.stars} callbackClose={() => OnModalClose()} />}
-                                                    />
-                                                </button>
+                                                    <button>
+                                                        <OpenModalMenuItem
+                                                            itemText="Edit review"
+                                                            onItemClick={openNewReviewModal}
+                                                            modalComponent={<EditReviewModal reviewId={review.id} review={review.review} stars={review.stars} callbackClose={() => OnModalClose()} />}
+                                                        />
+                                                    </button>
 
                                                     <div className="btn-delete-edit-container">
                                                         <button className="button-delete" onClick={() => deleteReview(review.id)}>
@@ -151,7 +152,7 @@ const SpotDetails = () => {
                                                 </div>
                                             }
                                         </div>
-                                        <br/>
+                                        <br />
                                     </div>
                                 )
 
