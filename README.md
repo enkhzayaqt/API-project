@@ -5,6 +5,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#wiki-links">Wiki links</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -27,6 +28,13 @@
 [BairBnB](https://bairbnb.onrender.com/) is a house booking site inspired by AirBnB. The name 'Bair' means 'House' in Mongolian language. BairBnB allows users to find houses to stay around the world. Users can book a house through this site and can rate their experiences.
 
 
+## Wiki links
+
+* [Backend API endpoints](https://github.com/enkhzayaqt/BairBnB-project/wiki/API-routes-documentation)
+* [2 MVP features](https://github.com/enkhzayaqt/BairBnB-project/wiki/2-MVP-features)
+* [PostgreSQL Database Schema](https://github.com/enkhzayaqt/BairBnB-project/wiki/PostgreSQL-Database-Schema)
+* [Redux state pseudocode](https://github.com/enkhzayaqt/BairBnB-project/wiki/Redux-state-pseudocode:)
+
 
 ### Built With
 
@@ -48,7 +56,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Follow these simple example steps.
+Follow these simple steps.
 
 ### Prerequisites
 
