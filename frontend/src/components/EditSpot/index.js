@@ -40,9 +40,7 @@ const EditSpot = () => {
             const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
 
             if (editedSpot) {
-                // dispatch(getSpotDetailsThunk(spotId));
-                // dispatch(getReviewsThunk(spotId));
-                history.push(`/spot/${spotId}`);
+                history.replace(`/spot/${spotId}`);
             }
         }
     }

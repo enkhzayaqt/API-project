@@ -37,7 +37,6 @@ const SpotDetails = () => {
     const editSpot = (e) => {
         e.preventDefault();
         history.push(`/spot/${spotId}/edit`);
-        dispatch(editReviewThunk(spotId));
         //refresh
         dispatch(getSpotDetailsThunk(spotId));
         dispatch(getReviewsThunk(spotId));
