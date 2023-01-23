@@ -167,7 +167,10 @@ const SpotDetails = () => {
                                                     <div>{reviewStarDom}</div>
                                                 </div>
                                             </div>
-                                            <div className="buttons">
+
+                                        </div>
+                                        <div className="review-item-desc">{review.review}</div>
+                                        <div className="buttons">
                                                 {user?.id == review.userId &&
                                                     <div className="edit-delete-review-btn-container">
                                                         <button className="btn-openmodal btn-blue" style={{
@@ -187,8 +190,6 @@ const SpotDetails = () => {
                                                     </div>
                                                 }
                                             </div>
-                                        </div>
-                                        <div className="review-item-desc">{review.review}</div>
                                     </div>
                                 )
 
