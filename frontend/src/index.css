@@ -2,6 +2,11 @@
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
+    margin: 0;
+}
+
+h2 {
+    margin: 0;
 }
 
 .margin-top-10 {
@@ -49,7 +54,20 @@ body {
     color: white;
 }
 
-.btn:hover {
+.btn-openmodal {
+    border: none;
+    padding: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-openmodal>li {
+    padding: 10px 25px;
+}
+
+.btn:hover,
+.btn-openmodal:hover {
     filter: brightness(90%);
 }
 
@@ -61,9 +79,38 @@ body {
     background-color: rgb(131, 186, 221)
 }
 
+.btn-white {
+    background-color: #fefefe;
+    color: #333;
+    border: 1px solid #333;
+}
+
 button:disabled,
 button[disabled] {
     border: 1px solid #999999;
     background-color: #cccccc;
     color: #666666;
+}
+
+.error-container {
+    color: red;
+}
+
+.spot-details-header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+.fa-star {
+    color: #f4d300
+}
+
+.spot-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    border-radius: 8px;
+    width: 290px;
+    height: 300px;
 }

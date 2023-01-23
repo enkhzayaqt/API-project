@@ -21,33 +21,35 @@ const CreateSpot = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newSpot = {
-            ownerId: user.id,
-            address,
-            city,
-            state,
-            country,
-            lat: 37.7645358,
-            lng: -122.4730327,
-            name,
-            description,
-            price,
-        };
+        if (validate()) {
+            const newSpot = {
+                ownerId: user.id,
+                address,
+                city,
+                state,
+                country,
+                lat: 37.7645358,
+                lng: -122.4730327,
+                name,
+                description,
+                price,
+            };
 
-        const createdSpot = await dispatch(createSpotThunk(newSpot));
+            const createdSpot = await dispatch(createSpotThunk(newSpot));
 
-        if (createdSpot && imageUrl) {
-            const image = {
-                url: imageUrl,
-                preview: "true"
+            if (createdSpot && imageUrl) {
+                const image = {
+                    url: imageUrl,
+                    preview: "true"
+                }
+
+                await dispatch(addImageThunk(image, createdSpot.id));
+                history.push(`/spot/${createdSpot.id}`)
             }
-
-            await dispatch(addImageThunk(image, createdSpot.id));
-            history.push(`/spot/${createdSpot.id}`)
         }
     }
 
-    useEffect(() => {
+    const validate = () => {
         const errors = [];
         if (name?.length === 0) errors.push("Please enter a name");
         if (address?.length === 0) errors.push("Please enter an address");
@@ -56,9 +58,10 @@ const CreateSpot = () => {
         if (country?.length === 0) errors.push("Please enter a country");
         if (price <= 0) errors.push("Please enter a price");
         if (description?.length === 0) errors.push("Please enter a description");
-
         setErrors(errors);
-    }, [name, address, city, state, country, price, description]);
+        if (errors.length > 0) return false;
+        else return true;
+    };
 
     const cancel = (e) => {
         e.preventDefault();
@@ -66,13 +69,13 @@ const CreateSpot = () => {
     };
 
     return (
-        <div>
+        <div className="create-spot-container">
             <button className="btn btn-blue" onClick={() => { history.push('/') }}>
-                    <i className="fa-solid fa-chevron-left"></i><span style={{ marginLeft: 10 }}>Back</span>
+                <i className="fa-solid fa-chevron-left"></i><span style={{ marginLeft: 10 }}>Back</span>
             </button>
 
             <h1>Create Spot</h1>
-            <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
+            <ul className="error-container">{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>
                 <div className="create-spot-content">
                     <div className="column">
@@ -144,7 +147,7 @@ const CreateSpot = () => {
                         </label>
                         <div className="margin-top-10" style={{ float: 'right' }}>
                             <button className="btn btn-blue" style={{ marginRight: 15 }} onClick={(e) => cancel(e)}>Cancel</button>
-                            <button className="btn btn-primary" disabled={errors.length > 0} type="submit">Submit</button>
+                            <button className="btn btn-primary" type="submit">Submit</button>
                         </div>
                     </div>
                 </div>

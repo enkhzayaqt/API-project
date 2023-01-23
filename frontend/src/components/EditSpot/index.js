@@ -17,34 +17,39 @@ const EditSpot = () => {
     const [state, setState] = useState(oldSpot.spotDetails.state);
     const [country, setCountry] = useState(oldSpot.spotDetails.country);
     const [price, setPrice] = useState(oldSpot.spotDetails.price);
-    const [imageUrl, setImageUrl] = useState(oldSpot.spotDetails.imageUrl);
     const [description, setDescription] = useState(oldSpot.spotDetails.description);
     const [errors, setErrors] = useState([]);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newSpot = {
-            ownerId: user.id,
-            address,
-            city,
-            state,
-            country,
-            lat: 37.7645358,
-            lng: -122.4730327,
-            name,
-            description,
-            price,
-        };
+        if (validate()) {
+            const newSpot = {
+                ownerId: user.id,
+                address,
+                city,
+                state,
+                country,
+                lat: 37.7645358,
+                lng: -122.4730327,
+                name,
+                description,
+                price,
+            };
 
-        const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
+            const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
 
-        if (editedSpot) {
-            history.push(`/spot/${spotId}`);
+            if (editedSpot) {
+                history.push(`/spot/${spotId}`);
+            }
         }
     }
 
-    useEffect(() => {
+    const cancel = (e) => {
+        e.preventDefault();
+        history.push(`/spot/${spotId}`);
+    };
+
+    const validate = () => {
         const errors = [];
         if (name?.length === 0) errors.push("Please enter a name");
         if (address?.length === 0) errors.push("Please enter an address");
@@ -53,23 +58,19 @@ const EditSpot = () => {
         if (country?.length === 0) errors.push("Please enter a country");
         if (price <= 0) errors.push("Please enter a price");
         if (description?.length === 0) errors.push("Please enter a description");
-
         setErrors(errors);
-    }, [name, address, city, state, country, price, description]);
-
-    const cancel = (e) => {
-        e.preventDefault();
-        history.push(`/spot/${spotId}`);
+        if (errors.length > 0) return false;
+        else return true;
     };
 
     return (
-        <div>
+        <div className="edit-spot-container">
             <button className="btn btn-blue" onClick={() => { history.push(`/spot/${spotId}`) }}>
-                    <i className="fa-solid fa-chevron-left"></i><span style={{ marginLeft: 10 }}>Back</span>
-                </button>
+                <i className="fa-solid fa-chevron-left"></i><span style={{ marginLeft: 10 }}>Back</span>
+            </button>
 
             <h1>Edit Spot</h1>
-            <ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul>
+            <ul className="error-container">{errors.map((error) => <li key={error}>{error}</li>)}</ul>
             <form onSubmit={handleSubmit}>
                 <label> Spot Name:
                     <input className="input"
@@ -127,8 +128,8 @@ const EditSpot = () => {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </label>
-                <button onClick={(e) => cancel(e)}>Cancel</button>
-                <button disabled={errors.length > 0} type="submit">Save Edit</button>
+                <button className="btn btn-blue" style={{ marginRight: 10 }} onClick={(e) => cancel(e)}>Cancel</button>
+                <button className="btn btn-primary" type="submit">Save</button>
             </form>
         </div>
     );
