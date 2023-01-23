@@ -461,33 +461,35 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
             message: "User already has a review for this spot",
             statusCode: 403
         })
-    }
-
-    const errors = validateNewReview(req.body);
-    if (errors.length === 0) {
-
-        const { review, stars } = req.body;
-        const spotReview = await Review.create({
-            spotId: req.params.spotId,
-            userId: req.user.id,
-            review,
-            stars,
-        })
-        spotReview.save();
-        res.status(201);
-        res.json(spotReview)
     } else {
-        res.status(400);
-        const errResponse = {};
-        errors.forEach(er => {
-            errResponse[er[0]] = er[1];
-        });
+        const errors = validateNewReview(req.body);
+        if (errors.length === 0) {
 
-        res.json({
-            message: 'Validation Error',
-            errors: errResponse
-        })
+            const { review, stars } = req.body;
+            const spotReview = await Review.create({
+                spotId: req.params.spotId,
+                userId: req.user.id,
+                review,
+                stars,
+            })
+            spotReview.save();
+            res.status(201);
+            res.json(spotReview)
+        } else {
+            res.status(400);
+            const errResponse = {};
+            errors.forEach(er => {
+                errResponse[er[0]] = er[1];
+            });
+
+            res.json({
+                message: 'Validation Error',
+                errors: errResponse
+            })
+        }
     }
+
+
 
 })
 
@@ -564,8 +566,8 @@ router.post('/', requireAuth, async (req, res, err) => {
 router.delete('/:spotId', requireAuth, async (req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
     if (spot) {
-         //Authorization
-         if (req.user.id !== spot.ownerId) {
+        //Authorization
+        if (req.user.id !== spot.ownerId) {
             res.status(403)
             res.json({
                 message: "Forbidden",

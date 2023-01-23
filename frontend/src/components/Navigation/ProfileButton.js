@@ -59,7 +59,7 @@ function ProfileButton({ user }) {
             <li className="info-li"><i className="far fa-envelope" /> {sessionUser.email}</li>
             <li className="info-li section-li"></li>
             <li onClick={(e) => createSpot(e)}><i className="far fa-plus" /> Create spot</li>
-            <li onClick={logout}><i class="fa-solid fa-right-from-bracket"></i> Log Out</li>
+            <li onClick={logout}><i className="fa-solid fa-right-from-bracket"></i> Log Out</li>
           </>
         ) : (
           <>
