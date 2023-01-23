@@ -63,7 +63,7 @@ function ReviewFormModal({ spotId, callbackClose }) {
     <div className="new-review-container">
       <h1 className="title">Write your review</h1>
       <form onSubmit={handleSubmit}>
-        <ul>
+        <ul className="error-container">
           {errors.map((error, idx) => (
             <li key={idx}>{error}</li>
           ))}

@@ -28,7 +28,7 @@ function DemoUserLogin() {
     <div className="demo-container">
       <h1 className="title">Demo User Login</h1>
       <form className="form-container" onSubmit={handleSubmit}>
-        <ul>
+        <ul className="error-container">
           {errors.map((error, idx) => (
             <li key={idx}>{error}</li>
           ))}
