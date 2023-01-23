@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { deleteReviewThunk, getReviewsThunk } from "../../store/review";
+import { deleteReviewThunk, editReviewThunk, getReviewsThunk } from "../../store/review";
 import { deleteSpotThunk, getSpotDetailsThunk, getSpotsThunk } from "../../store/spots";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import ReviewFormModal from "../ReviewFormModal";
@@ -37,6 +37,10 @@ const SpotDetails = () => {
     const editSpot = (e) => {
         e.preventDefault();
         history.push(`/spot/${spotId}/edit`);
+        dispatch(editReviewThunk(spotId));
+        //refresh
+        dispatch(getSpotDetailsThunk(spotId));
+        dispatch(getReviewsThunk(spotId));
     };
 
     const deleteReview = (reviewId) => {

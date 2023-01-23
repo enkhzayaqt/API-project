@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { addImageThunk, editSpotThunk } from "../../store/spots";
+import { getReviewsThunk } from "../../store/review";
+import { addImageThunk, editSpotThunk, getSpotDetailsThunk } from "../../store/spots";
 import './EditSpot.css'
 
 const EditSpot = () => {
@@ -39,6 +40,8 @@ const EditSpot = () => {
             const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
 
             if (editedSpot) {
+                // dispatch(getSpotDetailsThunk(spotId));
+                // dispatch(getReviewsThunk(spotId));
                 history.push(`/spot/${spotId}`);
             }
         }
