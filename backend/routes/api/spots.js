@@ -1,12 +1,9 @@
-const { urlencoded } = require('express');
 const express = require('express');
-
-const { Spot, User, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
-
+const { Spot, User, Review, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { validateNewSpot, validateNewReview, validateQueryParams } = require('../../utils/validation')
+const { validateNewReview, validateQueryParams } = require('../../utils/validation')
+const { singleMulterUpload, singlePublicFileUpload } = require('../../awsS3');
 const { Op } = require("sequelize");
-
 const router = express.Router();
 
 // Get all Spots
@@ -80,9 +77,6 @@ router.get('/', async (req, res) => {
                 {
                     model: Review
                 },
-                {
-                    model: SpotImage
-                },
             ],
             ...pagination
         });
@@ -103,17 +97,17 @@ router.get('/', async (req, res) => {
             delete spot.Reviews
         })
 
-        spotList.forEach(spot => {
-            spot.SpotImages.forEach(image => {
-                if (image.preview === true) {
-                    spot.previewImage = image.url
-                }
-            })
-            if (!spot.previewImage) {
-                spot.previewImage = 'no image yet'
-            }
-            delete spot.SpotImages
-        })
+        // spotList.forEach(spot => {
+        //     spot.SpotImages.forEach(image => {
+        //         if (image.preview === true) {
+        //             spot.previewImage = image.url
+        //         }
+        //     })
+        //     if (!spot.previewImage) {
+        //         spot.previewImage = 'no image yet'
+        //     }
+        //     delete spot.SpotImages
+        // })
 
         return res.json({
             Spots: spotList,
@@ -142,10 +136,7 @@ router.get('/current', requireAuth, async (req, res) => {
         include: [
             {
                 model: Review
-            },
-            {
-                model: SpotImage
-            },
+            }
         ],
     })
 
@@ -166,17 +157,17 @@ router.get('/current', requireAuth, async (req, res) => {
         delete spot.Reviews
     })
 
-    spotList.forEach(spot => {
-        spot.SpotImages.forEach(image => {
-            if (image.preview === true) {
-                spot.previewImage = image.url
-            }
-        })
-        if (!spot.previewImage) {
-            spot.previewImage = 'no image yet'
-        }
-        delete spot.SpotImages
-    })
+    // spotList.forEach(spot => {
+    //     spot.SpotImages.forEach(image => {
+    //         if (image.preview === true) {
+    //             spot.previewImage = image.url
+    //         }
+    //     })
+    //     if (!spot.previewImage) {
+    //         spot.previewImage = 'no image yet'
+    //     }
+    //     delete spot.SpotImages
+    // })
 
     return res.json({
         Spots: spotList
@@ -184,22 +175,14 @@ router.get('/current', requireAuth, async (req, res) => {
 })
 
 // Get details of a Spot from an id
-router.get('/:spotId', async (req, res, next) => {
+router.get('/:spotId', async (req, res) => {
     const spot = await Spot.findOne({
         where: {
             id: req.params.spotId
         },
         include: [
-            {
-                model: Review
-            },
-            {
-                model: SpotImage,
-                attributes: ['id', 'url', 'preview']
-            },
-            {
-                model: User
-            }
+            {model: Review},
+            {model: User },
         ]
     });
 
@@ -233,9 +216,8 @@ router.get('/:spotId', async (req, res, next) => {
         firstName: spot.User.firstName,
         lastName: spot.User.lastName
     }
-    //image
-    if (editSpot.SpotImages.length < 1) {
-        editSpot.SpotImages = 'no images yet'
+    if (editSpot.image.length < 1) {
+        editSpot.image = 'no images yet'
     }
     delete editSpot.User
     return res.json(editSpot);
@@ -308,7 +290,7 @@ router.get('/:spotId/reviews', requireAuth, async (req, res) => {
 })
 
 // Edit a Spot
-router.put('/:spotId', requireAuth, async (req, res, next) => {
+router.put('/:spotId', singleMulterUpload("image"), requireAuth, async (req, res, next) => {
     const spot = await Spot.findByPk(req.params.spotId);
 
     if (spot) {
@@ -321,32 +303,26 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
             })
         }
 
-        const errors = validateNewSpot(req.body);
-        if (errors.length === 0) {
-            const { address, city, state, country, lat, lng, name, description, price } = req.body;
-            spot.address = address;
-            spot.city = city;
-            spot.state = state;
-            spot.country = country;
-            spot.lat = lat;
-            spot.lng = lng;
-            spot.name = name;
-            spot.description = description;
-            spot.price = price;
-            spot.save();
-            res.status(201);
-            res.json(spot)
-        } else {
-            res.status(400);
-            const errResponse = {};
-            errors.forEach(er => {
-                errResponse[er[0]] = er[1];
-            });
-            res.json({
-                message: 'Validation Error',
-                errors: errResponse
-            })
+        const { address, city, state, country, lat, lng, name, description, price } = req.body;
+        let image = "https://contenthub-static.grammarly.com/blog/wp-content/uploads/2020/10/Write-a-Story.jpg";
+
+        if (req.file) {
+            image = await singlePublicFileUpload(req.file);
         }
+        spot.address = address;
+        spot.city = city;
+        spot.state = state;
+        spot.country = country;
+        spot.lat = lat;
+        spot.lng = lng;
+        spot.name = name;
+        spot.description = description;
+        spot.price = price;
+        spot.image = image;
+        spot.save();
+        res.status(201);
+        res.json(spot)
+
     }
 
     res.status(404)
@@ -493,72 +469,33 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
 
 })
 
-// Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', requireAuth, async (req, res, next) => {
-    const spot = await Spot.findByPk(req.params.spotId);
-
-    if (spot) {
-        //Authorization
-        if (req.user.id !== spot.ownerId) {
-            res.status(403)
-            res.json({
-                message: "Forbidden",
-                statusCode: 403
-            })
-        }
-        const { url, preview } = req.body;
-        const spotImage = await SpotImage.create({
-            spotId: req.params.spotId,
-            url,
-            preview,
-        })
-        spotImage.save();
-        return res.json({
-            "id": spotImage.id,
-            "url": spotImage.url,
-            "preview": spotImage.preview
-        });
-    }
-    res.status(404)
-    res.json({
-        message: "Spot couldn't be found",
-        statusCode: 404
-    })
-})
-
 // Create a Spot
-router.post('/', requireAuth, async (req, res, err) => {
+router.post('/', singleMulterUpload("image"), requireAuth, async (req, res) => {
 
-    const errors = validateNewSpot(req.body);
-    if (errors.length === 0) {
-        const { address, city, state, country, lat, lng, name, description, price } = req.body;
-        const spot = await Spot.create({
-            ownerId: req.user.id,
-            address,
-            city,
-            state,
-            country,
-            lat,
-            lng,
-            name,
-            description,
-            price
-        })
-        spot.save();
-        res.status(201);
-        res.json(spot)
-    } else {
-        res.status(400);
-        const errResponse = {};
-        errors.forEach(er => {
-            errResponse[er[0]] = er[1];
-        });
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-        res.json({
-            message: 'Validation Error',
-            errors: errResponse
-        })
+    let image = "https://contenthub-static.grammarly.com/blog/wp-content/uploads/2020/10/Write-a-Story.jpg";
+
+    if (req.file) {
+        image = await singlePublicFileUpload(req.file);
     }
+
+    const spot = await Spot.create({
+        ownerId: req.user.id,
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price,
+        image,
+    })
+    spot.save();
+    res.status(201);
+    res.json(spot)
 
 })
 
