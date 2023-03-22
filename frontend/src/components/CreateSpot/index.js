@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { addImageThunk, createSpotThunk } from "../../store/spots";
+import { createSpotThunk } from "../../store/spots";
 import "./createSpot.css";
 
 const CreateSpot = () => {
@@ -15,8 +15,8 @@ const CreateSpot = () => {
     const [state, setState] = useState("");
     const [country, setCountry] = useState("");
     const [price, setPrice] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
     const [description, setDescription] = useState("");
+    const [image, setImage] = useState("");
     const [errors, setErrors] = useState([]);
 
     const handleSubmit = async (e) => {
@@ -33,21 +33,18 @@ const CreateSpot = () => {
                 name,
                 description,
                 price,
+                image
             };
 
             const createdSpot = await dispatch(createSpotThunk(newSpot));
-
-            if (createdSpot && imageUrl) {
-                const image = {
-                    url: imageUrl,
-                    preview: "true"
-                }
-
-                await dispatch(addImageThunk(image, createdSpot.id));
-                history.push(`/spot/${createdSpot.id}`)
-            }
+            if(createdSpot) history.push(`/spot/${createdSpot.id}`);
         }
     }
+
+    const updateFile = (e) => {
+        const file = e.target.files[0];
+        if (file) setImage(file);
+    };
 
     const validate = () => {
         const errors = [];
@@ -96,12 +93,7 @@ const CreateSpot = () => {
                             />
                         </label>
                         <label> Spot Image:
-                            <input className="input"
-                                type="url"
-                                placeholder="Image"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                            />
+                            <input className="input" type="file" onChange={updateFile} />
                         </label>
                         <label> Description:
                             <input className="input"

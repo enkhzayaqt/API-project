@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getReviewsThunk } from "../../store/review";
-import { addImageThunk, editSpotThunk, getSpotDetailsThunk } from "../../store/spots";
+import { editSpotThunk } from "../../store/spots";
 import './EditSpot.css'
 
 const EditSpot = () => {
@@ -19,6 +18,7 @@ const EditSpot = () => {
     const [country, setCountry] = useState(oldSpot.spotDetails.country);
     const [price, setPrice] = useState(oldSpot.spotDetails.price);
     const [description, setDescription] = useState(oldSpot.spotDetails.description);
+    const [image, setImage] = useState(oldSpot.image);
     const [errors, setErrors] = useState([]);
 
     const handleSubmit = async (e) => {
@@ -35,15 +35,20 @@ const EditSpot = () => {
                 name,
                 description,
                 price,
+                image
             };
 
             const editedSpot = await dispatch(editSpotThunk(newSpot, spotId));
-
             if (editedSpot) {
                 history.replace(`/spot/${spotId}`);
             }
         }
     }
+
+    const updateFile = (e) => {
+        const file = e.target.files[0];
+        if (file) setImage(file);
+    };
 
     const cancel = (e) => {
         e.preventDefault();
@@ -128,6 +133,9 @@ const EditSpot = () => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                </label>
+                <label> Image:
+                    <input className="input" type="file" onChange={updateFile} />
                 </label>
                 <button className="btn btn-blue" style={{ marginRight: 10 }} onClick={(e) => cancel(e)}>Cancel</button>
                 <button className="btn btn-primary" type="submit">Save</button>

@@ -3,7 +3,6 @@ import { csrfFetch } from "./csrf";
 const GET_SPOTS = "spots/GET_SPOTS";
 const GET_SPOTDETAILS = "spots/GET_SPOTDETAILS";
 const CREATE_SPOT = 'spots/CREATE_SPOT';
-const ADD_IMAGE = 'spots/ADD_IMAGE';
 const DELETE_SPOT = "spots/DELETE_SPOT";
 const EDIT_SPOT = "spots/EDIT_SPOT";
 
@@ -22,11 +21,6 @@ export const getSpotDetails = (spot) => ({
 export const createSpot = (spot) => ({
     type: CREATE_SPOT,
     spot
-})
-
-export const addImage = (image) => ({
-    type: ADD_IMAGE,
-    image
 })
 
 export const deleteSpot = (spotId) => ({
@@ -59,32 +53,38 @@ export const getSpotDetailsThunk = (spotId) => async (dispatch) => {
 };
 
 export const createSpotThunk = (userInput) => async (dispatch) => {
+    const { address, city, state, country, lat, lng, name, description, price, image } = userInput;
+
+    const formData = new FormData();
+    formData.append("address", address);
+    formData.append("city", city);
+    formData.append("state", state);
+    formData.append("country", country);
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("lat", lat);
+    formData.append("lng", lng);
+    if (image) formData.append("image", image);
+
     const response = await csrfFetch('/api/spots/', {
         method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userInput)
+        headers: { "Content-Type": "multipart/form-data" },
+        body: formData,
     });
-    if (response.ok) {
-        const spot = await response.json();
-        dispatch(createSpot(spot));
-        return spot;
-    }
-}
 
-export const addImageThunk = (input, spotId) => async (dispatch) => {
-    const response = await csrfFetch(`/api/spots/${spotId}/images`, {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input)
-    })
-    if (response.ok) {
-        const image = await response.json();
-        dispatch(addImage(image));
-        return image;
-    }
+    const data = await response.json();
+    dispatch(createSpot(data));
+
+    // if (response.ok) {
+    //     const data = await response.json();
+    //     dispatch(createSpot(data));
+    //     return data;
+    // }
 }
 
 export const deleteSpotThunk = (spotId) => async (dispatch) => {
+
     const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'DELETE',
     })
@@ -96,11 +96,28 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
 }
 
 export const editSpotThunk = (input, spotId) => async (dispatch) => {
+    const { address, city, state, country, lat, lng, name, description, price, image } = input;
+
+    const formData = new FormData();
+    formData.append("address", address);
+    formData.append("city", city);
+    formData.append("state", state);
+    formData.append("country", country);
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("lat", lat);
+    formData.append("lng", lng);
+    if (image) formData.append("image", image);
+
+
+
     const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'PUT',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input)
+        headers: { "Content-Type": "multipart/form-data" },
+        body: formData
     })
+
     if (response.ok) {
         const editedSpot = await response.json();
         dispatch(editSpot(editedSpot));
@@ -132,14 +149,12 @@ export default function spotsReducer(state = initialState, action) {
                 ...state,
                 [action.spot.id]: action.spot
             }
-        case ADD_IMAGE:
+        case GET_SPOTDETAILS: {
             return {
                 ...state,
-                [action.image.id]: {
-                    ...action.image,
-                    previewImage: action.image.url
-                }
-            }
+                spotDetails: action.spot,
+            };
+        }
         case DELETE_SPOT:
             const newState = {
                 ...state
@@ -151,12 +166,6 @@ export default function spotsReducer(state = initialState, action) {
                 ...state,
                 [action.spot.id]: action.spot
             }
-        }
-        case GET_SPOTDETAILS: {
-            return {
-                ...state,
-                spotDetails: action.spot,
-            };
         }
         default:
             return state;
