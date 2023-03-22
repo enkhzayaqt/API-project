@@ -5,7 +5,7 @@ import "./spot.css";
 const Spot = (props) => {
     const user = useSelector((state) => state.session.user);
 
-    const { id, avgRating, city, description, previewImage, price, state } = props.data;
+    const { id, avgRating, city, description, image, price, state } = props.data;
     const intRating = !isNaN(avgRating) ? Math.floor(avgRating) : 0;
     const ratingDom = [];
     for (let i = 0; i < intRating; i++) {
@@ -15,8 +15,8 @@ const Spot = (props) => {
         <div className="spot-container">
             <a href={`/spot/${id}`} className="spot-thumb-link">
                 <div className="thumb-img-container">
-                    {previewImage !== 'no image yet' ?
-                        <img src={previewImage} className="thumb-img" alt="Spot Image" />
+                    {image !== 'no image yet' ?
+                        <img src={image} className="thumb-img" alt="Spot Image" />
                         :
                         <div className="no-image-container"><span>No Image</span></div>
                     }

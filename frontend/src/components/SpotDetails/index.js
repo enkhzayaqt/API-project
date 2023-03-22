@@ -53,14 +53,11 @@ const SpotDetails = () => {
         e.preventDefault();
         history.push(`/spot/${spotId}/edit`);
     };
-    // const addReview = (e) => {
-    //     e.preventDefault();
-    //     history.push()
-    // }
+
     useEffect(() => {
         dispatch(getSpotDetailsThunk(spotId));
         dispatch(getReviewsThunk(spotId));
-    }, []);
+    }, [spotId]);
 
     const openNewReviewModal = () => {
     };
@@ -198,12 +195,9 @@ const SpotDetails = () => {
 
                             })
                         }
-
                     </div>
                 </div>
             </div>
-
-
         </div >
     );
 };
