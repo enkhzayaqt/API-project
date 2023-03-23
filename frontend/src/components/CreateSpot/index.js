@@ -8,7 +8,6 @@ const CreateSpot = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector((state) => state?.session?.user);
-
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
@@ -37,7 +36,8 @@ const CreateSpot = () => {
             };
 
             const createdSpot = await dispatch(createSpotThunk(newSpot));
-            if(createdSpot) history.push(`/spot/${createdSpot.id}`);
+            if(createdSpot) history.push(`/spot/${createdSpot.id}`)
+            // if(createdSpot) history.push(`/`);
         }
     }
 

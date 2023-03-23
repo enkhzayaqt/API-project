@@ -73,14 +73,14 @@ export const createSpotThunk = (userInput) => async (dispatch) => {
         body: formData,
     });
 
-    const data = await response.json();
-    dispatch(createSpot(data));
+    // const data = await response.json();
+    // dispatch(createSpot(data));
 
-    // if (response.ok) {
-    //     const data = await response.json();
-    //     dispatch(createSpot(data));
-    //     return data;
-    // }
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(createSpot(data));
+        return data;
+    }
 }
 
 export const deleteSpotThunk = (spotId) => async (dispatch) => {
