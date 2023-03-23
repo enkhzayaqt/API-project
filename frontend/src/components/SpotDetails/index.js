@@ -19,7 +19,7 @@ const SpotDetails = () => {
     const user = useSelector((state) => state.session.user);
     const history = useHistory();
 
-    const { avgStarRating, numReviews, city, country, description, Owner, ownerId, name, SpotImages, price, state } = spotDetails;
+    const { avgStarRating, numReviews, city, country, description, Owner, ownerId, name, image, price, state } = spotDetails;
     const intRating = !isNaN(avgStarRating) ? Math.floor(avgStarRating) : 0;
 
     const ratingDom = [];
@@ -104,8 +104,8 @@ const SpotDetails = () => {
                 <div><i className="fa-solid fa-location-dot"></i> {city} {state} {country}</div>
             </div>
             <div className="spot-image-container">
-                {SpotImages && SpotImages.length > 0 &&
-                    <img className="spot-image" src={SpotImages[0].url} alt="Spot Image" />
+                {image &&
+                    <img className="spot-image" src={image} alt="Spot Image" />
                 }
             </div>
             <div className="spot-description-container">
