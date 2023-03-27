@@ -25,7 +25,7 @@
 
 ![homePage](./assets/home.png)
 
-[BairBnB](https://bairbnb.onrender.com/) is a house booking site inspired by AirBnB. The name 'Bair' means 'House' in Mongolian language. BairBnB allows users to find houses to stay around the world. Users can book a house through this site and can rate their experiences.
+[BairBnB](https://bairbnb.herokuapp.com/) is a house booking site inspired by AirBnB. The name 'Bair' means 'House' in Mongolian language. BairBnB allows users to find houses to stay around the world. Users can book a house through this site and can rate their experiences.
 
 
 ## Wiki links
