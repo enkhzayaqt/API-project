@@ -71,7 +71,7 @@ module.exports = {
         lat: 123446,
         lng: 1233456,
         name: 'Supreme Luxury for Discerning Tastes',
-        description: 'Extraordinary property for discerning tastes. Upscale everything. Massive rooms (6 En suite). Heated pool* and hot tub. Outdoor gardens. Huge Theatre. Gym with high end equipment. True Golf Simulator. 9 bedrooms, 10 baths. Luxurious in every way, yet warm and family oriented. Hosts and Boasts FUN!  On 3 acres.  ',
+        description: 'Extraordinary property for discerning tastes. Upscale everything. Massive rooms (6 En suite). Heated pool* and hot tub. Outdoor gardens. Huge Theatre. Gym with high end equipment. True Golf Simulator. 9 bedrooms, 10 bath. ',
         price: 899,
         image: 'https://a0.muscache.com/im/pictures/miso/Hosting-49504733/original/685bc6a5-4220-4370-b1da-cf8e7b57fd30.jpeg?im_w=720'
       },
@@ -110,7 +110,7 @@ module.exports = {
         lat: 123446,
         lng: 1233456,
         name: 'Beverly Hills Maison',
-        description: 'Private, gated French country chateau-inspired home sits at the end of a cul de sac on nearly 2 acres of land and is surrounded by stately trees, mature landscaping, and verdant canyon views. Beautifully living room with fireplace, formal dining room, large kitchen, and light-filled breakfast area.',
+        description: 'Private, gated French country chateau-inspired home sits at the end of a cul de sac on nearly 2 acres of land and is surrounded by stately trees, mature landscaping, and verdant canyon views. Beautifully living room with fireplace.',
         price: 2484,
         image: 'https://a0.muscache.com/im/pictures/prohost-api/Hosting-47354666/original/a2d99008-721a-4153-89e5-c3d251a0389b.jpeg?im_w=720'
       },
