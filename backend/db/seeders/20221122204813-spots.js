@@ -110,7 +110,7 @@ module.exports = {
         lat: 123446,
         lng: 1233456,
         name: 'Beverly Hills Maison',
-        description: 'Private, gated French country chateau-inspired home sits at the end of a cul de sac on nearly 2 acres of land and is surrounded by stately trees, mature landscaping, and verdant canyon views. Beautifully living room with fireplace, formal dining room, large kitchen, and light-filled breakfast area. Spectacular canyon views from every room and nearby access to Beverly Hills, and the valley. Expansive backyard and pool area.',
+        description: 'Private, gated French country chateau-inspired home sits at the end of a cul de sac on nearly 2 acres of land and is surrounded by stately trees, mature landscaping, and verdant canyon views. Beautifully living room with fireplace, formal dining room, large kitchen, and light-filled breakfast area.',
         price: 2484,
         image: 'https://a0.muscache.com/im/pictures/prohost-api/Hosting-47354666/original/a2d99008-721a-4153-89e5-c3d251a0389b.jpeg?im_w=720'
       },
@@ -123,7 +123,7 @@ module.exports = {
         lat: 123446,
         lng: 1233456,
         name: 'Petra Manor',
-        description: "Most villas have a great room, but this manor just north of Malibu Pier has many—even the bedrooms, cinema, and wine cave loom large. Mixing French, Italian, and Spanish design, this is Mediterranean meets Hollywood in high fashion. Linger in the pool with views of stone walls and lawn, play tennis on the private court, and host cocktails at the marble wet bar. You're 1.5 miles from the Pier.",
+        description: "Most villas have a great room, but this manor just north of Malibu Pier has many—even the bedrooms, cinema, and wine cave loom large. Mixing French, Italian, and Spanish design, this is Mediterranean meets Hollywood in high fashion.",
         price: 16160,
         image: 'https://a0.muscache.com/im/pictures/15dd8957-70d5-452a-8649-49913f40fada.jpg?im_w=720'
       },
