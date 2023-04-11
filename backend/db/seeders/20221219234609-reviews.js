@@ -27,6 +27,42 @@ module.exports = {
         userId: 3,
         review: 'very good',
         stars: 5,
+      },
+      {
+        spotId: 4,
+        userId: 1,
+        review: 'A terrific place to relax, unwind and celebrate. The grounds were beautiful and the villa lived up to its description.',
+        stars: 4,
+      },
+      {
+        spotId: 5,
+        userId: 2,
+        review: 'excellent stay. great hosts. Very thoughtful and upgraded our room to the suite as it was vacant and we were travelling with a small baby. ',
+        stars: 5,
+      },
+      {
+        spotId: 6,
+        userId: 3,
+        review: 'Fabulous location, great pool area, lovely room with excellent air conditioning',
+        stars: 5,
+      },
+      {
+        spotId: 7,
+        userId: 1,
+        review: 'good',
+        stars: 4,
+      },
+      {
+        spotId: 8,
+        userId: 2,
+        review: 'bad',
+        stars: 2,
+      },
+      {
+        spotId: 9,
+        userId: 3,
+        review: 'We had an incredible stay at Jean-Louis’ glorious château, set within the idyllic environs of vineyards as far as the eye can see. ',
+        stars: 5,
       }
     ], {})
   },
