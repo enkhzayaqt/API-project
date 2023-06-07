@@ -120,11 +120,13 @@ button[disabled] {
     justify-content: space-between;
     height: 25px;
     border-top: 1px lightgray solid;
-    color: black;
+    color: gray;
+    font-family: sans-serif;
     text-align:start;
     align-items: center;
     padding: 10px 0;
-    margin-bottom: 10px;
+    padding-bottom: 50px;
+    margin-bottom: 50px;
     width: 960px;
     margin: 0 auto;
 }
@@ -133,8 +135,4 @@ button[disabled] {
     font-size: 25px;
     color: rgb(60, 58, 58);
     margin: 0 5px;
-}
-
-.footer-title {
-    margin-bottom: 8px;
 }
