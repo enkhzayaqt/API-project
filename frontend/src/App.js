@@ -7,6 +7,7 @@ import CreateSpot from './components/CreateSpot'
 import HeaderBar from './components/HeaderBar';
 import SpotDetails from "./components/SpotDetails";
 import EditSpot from "./components/EditSpot";
+import Footer from "./components/Footer"
 import "./index.css"
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           </Route>
         </Switch>
       )}
+      <Footer/>
     </>
   );
 }
