@@ -136,3 +136,11 @@ button[disabled] {
     color: rgb(60, 58, 58);
     margin: 0 5px;
 }
+
+.search-box{
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+  }
+
+
