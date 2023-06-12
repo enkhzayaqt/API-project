@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import ProfileButton from '../Navigation/ProfileButton';
-import "./DropDown.css";
-
 
 function Dropdown() {
     const [visible, setVisible] = useState('none');

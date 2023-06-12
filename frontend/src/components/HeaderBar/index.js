@@ -1,13 +1,12 @@
 import Header from "../Header";
-import Search from "../Search";
+import SearchBar from "../SearchBar";
 import Dropdown from "../Dropdown";
-import './HeaderBar.css'
 
 const HeaderBar = () => {
     return (
         <div id="header-bar">
             <Header />
-            <Search />
+            <SearchBar />
             <Dropdown />
         </div>
     )

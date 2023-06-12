@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import "./spot.css";
 
 const Spot = (props) => {
     const user = useSelector((state) => state.session.user);

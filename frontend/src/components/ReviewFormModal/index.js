@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import * as reviewActions from "../../store/review";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import "./ReviewModal.css"
 
 function ReviewFormModal({ spotId, callbackClose }) {
   const dispatch = useDispatch();
