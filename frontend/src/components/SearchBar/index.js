@@ -23,6 +23,8 @@ function SearchBar() {
                 placeholder="Type to Search..."
 
             />
+            <div id="searchResults"></div>
+
         </div>
     )
 }
