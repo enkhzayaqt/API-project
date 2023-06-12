@@ -2,12 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import * as sessionActions from '../../store/session';
-import * as spotActions from '../../store/spots';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import DemoUserLogin from '../DemoUserModal'
-import './Navigation.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();

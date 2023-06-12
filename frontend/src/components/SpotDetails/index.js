@@ -6,7 +6,6 @@ import { deleteSpotThunk, getSpotDetailsThunk, getSpotsThunk } from "../../store
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import ReviewFormModal from "../ReviewFormModal";
 import EditReviewModal from '../EditReviewModal';
-import "./SpotDetails.css";
 
 const SpotDetails = () => {
     const routeParams = useParams();

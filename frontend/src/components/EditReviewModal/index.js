@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import * as reviewActions from "../../store/review";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import "./ReviewModal.css"
-import { useHistory } from "react-router-dom";
 
 function EditReviewModal(props) {
   const dispatch = useDispatch();
