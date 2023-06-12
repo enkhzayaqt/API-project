@@ -4,12 +4,16 @@ const Footer = () => {
             <div>© 2023 Bairbnb</div>
 
             <div>
-            <a href="https://github.com/enkhzayaqt" target="_blank"><i className="fa-brands fa-github"></i></a>
-            <a href="https://www.linkedin.com/in/emma-munkhochir/" target="_blank"><i className="fa fa-linkedin" aria-hidden="true"></i></a>
-            <a href="https://www.facebook.com/emilin.zaya" target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></a>
+            Created with <i class="fa fa-heart"></i> by Enkhzaya Munkhochir
             </div>
 
-            <div>Enkhzaya Munkhochir
+            <div>
+                <p>
+                    <a target="_blank" href="https://www.instagram.com/m_zaya/"><i class="fab fa-instagram"></i></a>
+                    <a target="_blank" href="https://www.linkedin.com/in/emma-munkhochir/"><i class="fab fa-linkedin"></i></a>
+                    <a target="_blank" href="https://github.com/enkhzayaqt"><i class="fa-brands fa-github"></i></a>
+                    <a target="_blank" href="https://www.facebook.com/emilin.zaya"><i class="fab fa-facebook-square"></i></a>
+                </p>
             </div>
 
         </div>
