@@ -36,7 +36,6 @@ const CreateSpot = () => {
 
             const createdSpot = await dispatch(createSpotThunk(newSpot));
             if(createdSpot) history.push(`/spot/${createdSpot.id}`)
-            // if(createdSpot) history.push(`/`);
         }
     }
 

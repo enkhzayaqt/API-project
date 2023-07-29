@@ -54,7 +54,6 @@ export const getSpotDetailsThunk = (spotId) => async (dispatch) => {
 
 export const createSpotThunk = (userInput) => async (dispatch) => {
     const { address, city, state, country, lat, lng, name, description, price, image } = userInput;
-
     const formData = new FormData();
     formData.append("address", address);
     formData.append("city", city);
@@ -72,9 +71,6 @@ export const createSpotThunk = (userInput) => async (dispatch) => {
         headers: { "Content-Type": "multipart/form-data" },
         body: formData,
     });
-
-    // const data = await response.json();
-    // dispatch(createSpot(data));
 
     if (response.ok) {
         const data = await response.json();
@@ -97,7 +93,6 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
 
 export const editSpotThunk = (input, spotId) => async (dispatch) => {
     const { address, city, state, country, lat, lng, name, description, price, image } = input;
-
     const formData = new FormData();
     formData.append("address", address);
     formData.append("city", city);
@@ -109,9 +104,6 @@ export const editSpotThunk = (input, spotId) => async (dispatch) => {
     formData.append("lat", lat);
     formData.append("lng", lng);
     if (image) formData.append("image", image);
-
-
-
     const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'PUT',
         headers: { "Content-Type": "multipart/form-data" },
