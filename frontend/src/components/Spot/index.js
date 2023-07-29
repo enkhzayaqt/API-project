@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 const Spot = (props) => {
     const user = useSelector((state) => state.session.user);
-
     const { id, avgRating, city, description, image, price, state } = props.data;
     const intRating = !isNaN(avgRating) ? Math.floor(avgRating) : 0;
     const ratingDom = [];
