@@ -21,10 +21,8 @@ function SearchBar() {
             <input type="text"
                 className="input-search"
                 placeholder="Type to Search..."
-
             />
             <div id="searchResults"></div>
-
         </div>
     )
 }
